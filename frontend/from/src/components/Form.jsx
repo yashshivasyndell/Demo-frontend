@@ -42,6 +42,8 @@ export const Form = () => {
       .required("Phone number is required"),
     dob: yup.string().required("Date of birth is required"),
     gender: yup.string().required("Gender is required"),
+    country:yup.string().required("Country cant be idle"),
+    state:yup.string().required("state cant be idle"),
     password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
     pincode: yup.string().min(6, "Pincode must be at least six digits").required("Pincode is required"),
   });
@@ -50,8 +52,8 @@ export const Form = () => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setUser({ ...user, [name]: value });
-
+    
+      setUser({ ...user, [name]: value });
   
     setErrors((prevErrors) => ({
       ...prevErrors,
@@ -76,6 +78,10 @@ export const Form = () => {
       country: country.isoCode,
       state: "", 
     });
+
+    setErrors({
+      ...errors,country:""
+    })
   };
   
   const handleStateChange = (state) => {
@@ -258,6 +264,7 @@ export const Form = () => {
                   </option>
                 ))}
               </select>
+              {errors.country && <p className="text-red-500 mt-1 text-left text-xs ">{errors.country}</p>}
             </div>
 
             {/* State Dropdown */}
