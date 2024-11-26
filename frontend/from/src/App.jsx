@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { Form } from './components/Form'
 import {Routes,Route, Navigate} from "react-router-dom"
-import { SignUp } from './components/SignUp'
+import { Login } from './components/Login'
 import { Home } from './components/Home'
 
 function App() {
@@ -12,9 +12,9 @@ function App() {
     <>
     <Routes>
       <Route path='/' element={<Form/>} />
-      <Route path='/signup' element={<SignUp/>} />
+      <Route path='/login' element={<Login/>} />
       <Route path='/Home' element={<Home/>}/>
-      </Routes>
+    </Routes>
     </>
   )
 }

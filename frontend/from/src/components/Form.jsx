@@ -5,6 +5,7 @@ import axios from "axios";
 import * as yup from "yup";
 import {toast,ToastContainer} from 'react-toastify'
 import { handleError, handleSuccess } from "../util";
+import { useNavigate } from "react-router-dom";
 
 export const Form = () => {
   const [user, setUser] = useState({
@@ -19,6 +20,10 @@ export const Form = () => {
     state: "",
     pincode: "",
   });
+
+  const navigate = useNavigate();
+
+
 
   const [errors, setErrors] = useState({});
   const [isPhoneDisabled, setIsPhoneDisabled] = useState(false);
@@ -38,7 +43,7 @@ export const Form = () => {
     dob: yup.string().required("Date of birth is required"),
     gender: yup.string().required("Gender is required"),
     password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-    pincode: yup.number().min(100000, "Pincode must be at least 6 digits").required("Pincode is required"),
+    pincode: yup.string().min(6, "Pincode must be at least six digits").required("Pincode is required"),
   });
 
   const handleChange = (e) => {
@@ -99,9 +104,12 @@ export const Form = () => {
   
       console.log("User created:", response.data);
       handleSuccess("user Registered!")
+      setTimeout(()=>{
+        navigate('/Home')
+      },1000)
+
     } catch (err) {
       const errorMessages = {};
-  
       
       if (err.inner && Array.isArray(err.inner)) {
         err.inner.forEach((validationError) => {
@@ -116,7 +124,10 @@ export const Form = () => {
         const { status, data } = err.response;
   
         if (status === 409) {
-          handleError(data.message); 
+          handleError(data.message);
+          setTimeout(() => {
+            navigate('/Login')
+          }, 1000);
         } 
       } else {
         console.error("Unexpected error:", err.message);
@@ -126,14 +137,14 @@ export const Form = () => {
   };
   
   return (
-    <div className="min-h-screen   flex items-center justify-center">
-      <form className=" bg-[#DFF2EB] shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-teal-600">User Registration</h2>
+    <div className="min-h-screen flex items-center justify-center">
+      <form className=" bg-[#1F509A] shadow-xl  rounded-lg px-10 py-5 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white mt-4">User Registration</h2>
         <div className="space-y-4">
           
           {/* First Name */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 ml-0 text-sm font-medium text-gray-700">First Name</label>
+          <div className="grid items-center text-white">
+            <label className="text-left text-sm font-medium mb-2 text-white">First Name</label>
             <input
               type="text"
               name="name"
@@ -142,12 +153,12 @@ export const Form = () => {
               onChange={handleChange}
               placeholder="Enter your first name"
             />
-            {errors.name && <p className="text-red-500 text-xs ">{errors.name}</p>}
+            {errors.name && <p className="text-red-500 text-left text-xs ">{errors.name}</p>}
           </div>
 
           {/* Last Name */}
-          <div className="grid  items-center space-x-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">Last Name</label>
+          <div className="grid  items-center">
+            <label className="text-left text-sm font-medium mb-1 text-white">Last Name</label>
             <input
               type="text"
               name="lastname"
@@ -156,12 +167,12 @@ export const Form = () => {
               onChange={handleChange}
               placeholder="Enter your last name"
             />
-            {errors.lastname && <p className="text-red-500 text-sm">{errors.lastname}</p>}
+            {errors.lastname && <p className="text-red-500 text-left text-xs ">{errors.lastname}</p>}
           </div>
 
           {/* Email Address */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 ml-2 mb-2 text-sm font-medium text-gray-700">Email Address</label>
+          <div className="grid items-center">
+            <label className="text-left mb-2 text-sm font-medium text-white">Email Address</label>
             <input
               type="email"
               name="email"
@@ -170,12 +181,12 @@ export const Form = () => {
               onChange={handleChange}
               placeholder="Enter your email"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && <p className="text-red-500 text-left text-xs ">{errors.email}</p>}
           </div>
 
           {/* Phone Number */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 ml-3 mb-2 text-sm font-medium text-gray-700">Phone Number</label>
+          <div className="grid items-center">
+            <label className="text-left mb-2 text-sm font-medium  text-white">Phone Number</label>
             <input
               type="tel"
               name="phone"
@@ -185,11 +196,11 @@ export const Form = () => {
               disabled={isPhoneDisabled}
               placeholder="Enter your phone number"
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && <p className="text-red-500 text-left text-xs ">{errors.phone}</p>}
           </div>
 
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">Date of Birth</label>
+          <div className="grid items-center">
+            <label className="text-left text-sm font-medium ml-1 mb-2 text-white">Date of Birth</label>
             <input
               type="date"
               name="dob"
@@ -197,12 +208,12 @@ export const Form = () => {
               value={user.dob}
               onChange={handleChange}
             />
-            {errors.dob && <p className="text-red-500 text-sm">{errors.dob}</p>}
+            {errors.dob && <p className="text-red-500 text-left text-xs ">{errors.dob}</p>}
           </div>
 
           {/* Gender */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">Gender</label>
+          <div className="grid items-center">
+            <label className="text-left text-sm font-medium  mb-2 text-white">Gender</label>
             <select
               name="gender"
               className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none"
@@ -214,12 +225,12 @@ export const Form = () => {
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
-            {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+            {errors.gender && <p className="text-red-500 text-left text-xs ">{errors.gender}</p>}
           </div>
 
           {/* Password */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">Password</label>
+          <div className="grid items-center ">
+            <label className="text-left text-sm font-medium mb-2 text-white">Password</label>
             <input
               type="password"
               name="password"
@@ -228,19 +239,19 @@ export const Form = () => {
               onChange={handleChange}
               placeholder="Enter your password"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && <p className="text-red-500 text-left text-xs ">{errors.password}</p>}
           </div>
 
           {/* Country and State */}
-          <div className="ml-5 flex flex-col space-y-4">
+          <div className="flex flex-col w-full">
             {/* Country Dropdown */}
-            <div className="col flex gap-4">
-              <label className="mt-4 text-sm font-medium text-gray-700 mb-1">Country</label>
+            <div className=" flex flex-col">
+              <label className="mt-4 text-sm font-medium mb-1 text-left text-white">Country</label>
               <select
-                className="form-select w-[200px] ml-7 h-11 outline-none border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="form-select w-full h-11 outline-none border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                 onChange={(e) => handleCountryChange(countries.find((c) => c.isoCode === e.target.value))}
               >
-                <option value="">Select Country</option>
+                <option value="" className="text-left">Select Country</option>
                 {countries.map((country) => (
                   <option key={country.isoCode} value={country.isoCode}>
                     {country.name}
@@ -250,14 +261,14 @@ export const Form = () => {
             </div>
 
             {/* State Dropdown */}
-            <div className="col flex gap-4">
-              <label className="text-sm mt-3 font-medium text-gray-700">State</label>
-              <select
+            <div className="col flex flex-col text-left">
+              <label className="text-sm mt-3 font-medium text-left mb-1 text-white">State</label>
+              <select 
                      onChange={(e) =>
                        handleStateChange(states.find((s) => s.isoCode === e.target.value))
                      }
                      disabled={!selectedCountry}
-                     className={`form-select w-[200px] ml-12 h-11 border rounded-md shadow-sm ${
+                     className={`form-select w-full h-11 border rounded-md shadow-sm ${
                        !selectedCountry
                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                          : "border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
@@ -275,8 +286,8 @@ export const Form = () => {
           </div>
 
           {/* Pincode */}
-          <div className="grid items-center space-x-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">Pincode</label>
+          <div className="grid items-center ">
+            <label className="text-left text-sm text-white font-medium mb-2">Pincode</label>
             <input
               type="number"
               name="pincode"
@@ -285,17 +296,28 @@ export const Form = () => {
               onChange={handleChange}
               placeholder="Enter your pincode"
             />
-            {errors.pincode && <p className="text-red-500 text-sm">{errors.pincode}</p>}
+            {errors.pincode && <p className="text-red-500 text-left text-sm">{errors.pincode}</p>}
           </div>
 
           {/* Submit Button */}
+          <div className="flex flex-col gap-1 w-[270px] mx-auto">
           <button
             type="submit"
+          
             onClick={handleRegisterUser}
-            className="w-full bg-teal-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:outline-none"
+            className="w-[full] mb-3 bg-teal-500 text-black font-light p-2 rounded shadow hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:outline-none"
           >
             Register
           </button>
+          <button
+            type="submit"
+          
+            onClick={handleRegisterUser}
+            className="w-[full] mb-3 bg-yellow-300 text-black font-light p-2 rounded shadow hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:outline-none"
+          >
+            Existing user Login
+          </button>
+          </div>
         </div>
       </form>
       <ToastContainer />
