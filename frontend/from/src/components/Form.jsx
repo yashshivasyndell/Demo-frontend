@@ -6,6 +6,7 @@ import * as yup from "yup";
 import {toast,ToastContainer} from 'react-toastify'
 import { handleError, handleSuccess } from "../util";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Form = () => {
   const [user, setUser] = useState({
@@ -22,8 +23,7 @@ export const Form = () => {
   });
 
   const navigate = useNavigate();
-
-
+  const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({});
   const [isPhoneDisabled, setIsPhoneDisabled] = useState(false);
@@ -92,7 +92,10 @@ export const Form = () => {
     });
   };
   
-
+const handleLogin = (e) => {
+  e.preventDefault();
+  navigate("/login");
+}
   const handleRegisterUser = async (e) => {
     
     e.preventDefault();
@@ -143,18 +146,19 @@ export const Form = () => {
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form className=" bg-[#1F509A] shadow-xl  rounded-lg px-10 py-5 w-full max-w-md">
+    <div className="min-h-screen  flex items-center justify-center">
+      <form className=" bg-[#1F509A] shadow-xl rounded-lg px-10 py-5 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6 text-white mt-4">User Registration</h2>
         <div className="space-y-4">
           
           {/* First Name */}
+          <div className="">
           <div className="grid items-center text-white">
             <label className="text-left text-sm font-medium mb-2 text-white">First Name</label>
             <input
               type="text"
               name="name"
-              className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none"
+              className="flex-1 p-2 text-black border rounded focus:ring-teal-400 focus:border-teal-400 outline-none"
               value={user.name}
               onChange={handleChange}
               placeholder="Enter your first name"
@@ -204,7 +208,7 @@ export const Form = () => {
             />
             {errors.phone && <p className="text-red-500 text-left text-xs ">{errors.phone}</p>}
           </div>
-
+          {/*dob*/}
           <div className="grid items-center">
             <label className="text-left text-sm font-medium ml-1 mb-2 text-white">Date of Birth</label>
             <input
@@ -216,7 +220,7 @@ export const Form = () => {
             />
             {errors.dob && <p className="text-red-500 text-left text-xs ">{errors.dob}</p>}
           </div>
-
+          </div>
           {/* Gender */}
           <div className="grid items-center">
             <label className="text-left text-sm font-medium  mb-2 text-white">Gender</label>
@@ -318,8 +322,7 @@ export const Form = () => {
           </button>
           <button
             type="submit"
-          
-            onClick={handleRegisterUser}
+            onClick={handleLogin}
             className="w-[full] mb-3 bg-yellow-300 text-black font-light p-2 rounded shadow hover:bg-teal-600 focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:outline-none"
           >
             Existing user Login
