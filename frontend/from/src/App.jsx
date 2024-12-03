@@ -8,6 +8,7 @@ import { loadUser } from './redux/store/action';
 import  Dashboard  from './components/Dashboard';
 import { Layout } from './components/Layout';
 import Sidebar from './components/Sidebar';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ console.log(isAuthenticated)
     
   return (
     <>
-      
+    <ToastContainer />
        {isAuthenticated ? <Routes> <Route path='*' element={<Layout/>}/> </Routes> : 
        <Routes>
         <Route path='/login' element={<Login/>}/>

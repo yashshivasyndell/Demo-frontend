@@ -8,6 +8,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { handlelogin } from "../redux/store/action";
+import { Layout } from "./Layout";
 
 export const Login = () => {
   const [user, setUser] = useState({
@@ -56,12 +57,15 @@ export const Login = () => {
       setErrors({});
 
       const response = await dispatch(handlelogin(user));
-
-      console.log("User created:", response);
-      handleSuccess("Login Success!");
-
-
-      
+      if (response && response.success) {
+        handleSuccess("Logged In")
+        setTimeout(() => {
+          navigate('/dashboard')
+        }, 500);
+        console.log("response is true",response.success);
+      } else {
+        handleError("Oops!Wrong email or password");
+      }
     } catch (err) {
       const errorMessages = {};
       setErrors(errorMessages);
@@ -75,8 +79,8 @@ export const Login = () => {
           }, 1000);
         }
       } else {
-        console.error("Unexpected error:", err.message);
-        handleError("Unexpected error occurred!");
+        console.log(err);
+        handleError("Unexpected error");
       }
     }
   };

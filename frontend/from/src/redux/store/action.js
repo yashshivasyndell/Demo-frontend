@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const jsonconfig = {
     headers:{"Content-type":"application/json"},
     withCredentials:true
@@ -13,8 +14,10 @@ export const handlelogin = (loginCred) => async (dispatch) => {
         jsonconfig
       );
       console.log(data);
-      dispatch({ type: "LOGIN_SUCCESS", payload: data });
-      dispatch(loadUser());
+      setTimeout(()=>{
+        dispatch({ type: "LOGIN_SUCCESS", payload: data });
+        dispatch(loadUser());
+      },500)
       return data;
     } catch (error) {
       dispatch({ type: "LOGIN_FAIL", payload: "Login Failed" });

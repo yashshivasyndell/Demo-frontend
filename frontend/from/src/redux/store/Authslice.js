@@ -41,6 +41,12 @@ const userReducer = createReducer(initialState, (builder) => {
     state.isAuthenticated = false;
     state.error = action.payload;
   });
+  builder.addCase("LOGOUT", (state) => {
+    state.user = null;
+    state.isAuthenticated = false;
+    state.loading = false;
+    state.error = null; 
+  });
 });
 
 export default userReducer;
