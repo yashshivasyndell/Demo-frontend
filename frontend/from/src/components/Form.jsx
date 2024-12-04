@@ -3,7 +3,7 @@ import "react-phone-input-2/lib/style.css";
 import { Country, State, City } from "country-state-city";
 import axios from "axios";
 import * as yup from "yup";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../util";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,7 +63,7 @@ export const Form = () => {
     ConfPassword: yup
       .string()
       .nullable()
-      .oneOf([yup.ref("password"), null], "Passwords must match") // Comparing password and ConfPassword
+      .oneOf([yup.ref("password"), null], "Passwords must match") 
       .required("Confirm password is required"),
     pincode: yup
       .string()
@@ -128,7 +128,7 @@ export const Form = () => {
     });
   };
 
-  const handlelogin = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     navigate("/login");
   };

@@ -113,7 +113,7 @@ export const Login = () => {
           <div className="mb-5 text-white text-left grid gap-2 relative">
             <label htmlFor="">Password</label>
             <input
-              type={showPass ? "password" : "Number"}
+              type={showPass ? "text" : "password"}
               name="password"
               value={user.password}
               onChange={handleChange}

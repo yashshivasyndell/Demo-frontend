@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const jsonconfig = {
     headers:{"Content-type":"application/json"},
     withCredentials:true
@@ -29,6 +28,25 @@ export const handlelogin = (loginCred) => async (dispatch) => {
     }
   };
 
+  //Logout Redux setup
+
+  export const handlelogout =()=>
+     async (dispatch)=>{
+    try{
+      dispatch({type:"LOGOUT"})
+      const logout = await axios.post('http://localhost:3000/auth/cookies', {}, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      console.log('Logout response',logout);
+      
+    }catch(error){
+      console.log("logout failed",error);
+       
+    }
+  }
   export const loadUser = () => async (dispatch) => {
     try {
       console.log("object");

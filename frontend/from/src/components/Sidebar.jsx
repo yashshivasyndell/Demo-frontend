@@ -16,6 +16,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { Outlet } from "react-router-dom";
+import { handlelogout } from "../redux/store/action";
 function Sidebar() {
     const [open, setOpen] = React.useState(false);
 
@@ -26,19 +27,16 @@ function Sidebar() {
    const navigate = useNavigate()
   
     const dispatch = useDispatch();
+
+
     const handleLogout = async (e) => {
-      console.log("click");
-      navigate('/login')
+      const logOut = dispatch(handlelogout())
       e.preventDefault();
-      const call = await axios.post("http://localhost:3000/auth/cookies",{}, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      console.log(call);
-      if(call.status === 200){
-        dispatch(loadUser())
+      if(logOut){
+        console.log("Logout Success");
+        navigate("/login")
+      }else{
+        console.log("Error in logging out");
       }
     };
   
@@ -50,12 +48,14 @@ function Sidebar() {
     const handleHome = ()=>{
         navigate('/home')
     }
+    {/*Profile*/}
+    const handleProfile = ()=>{
+      navigate('/profile')
+    }
     const handleGallary = ()=>{
         navigate('/gallary')
     }
 
-    
-  
     const DrawerList = (
       <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
         <List>
@@ -70,6 +70,7 @@ function Sidebar() {
             </ListItemIcon>
             <ListItemText primary={"Dashboard"} />
           </ListItemButton>
+          
           {/*users or register*/}
           <ListItemButton onClick={handleHome} 
           selected={location.pathname === '/home'}
@@ -80,6 +81,18 @@ function Sidebar() {
             </ListItemIcon>
               <ListItemText primary={"Home"}/>
           </ListItemButton>
+
+          {/*Profile or password reset*/}
+          <ListItemButton onClick={handleProfile}
+          selected={location.pathname === '/profile'}
+          sx={{ backgroundColor: location.pathname === '/profile' ? 'blue' : 'transparent', '&.Mui-selected': { backgroundColor: '#B1F0F7' } }}
+           className="flex items-center">
+          <ListItemIcon>
+              <Person2OutlinedIcon />
+            </ListItemIcon>
+              <ListItemText primary={"Profile"}/>
+          </ListItemButton>
+
           {/*login*/}
           <ListItemButton onClick={handleGallary}
           selected={location.pathname === '/gallary'}
@@ -105,7 +118,6 @@ function Sidebar() {
   
     return (
       <div>
-        
         <Drawer className="" variant="permanent" >
           <div className="">
           <img className="h-14 w-14 mx-auto mt-3" src={zoundslike} alt="" />

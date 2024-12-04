@@ -45,8 +45,9 @@ const userReducer = createReducer(initialState, (builder) => {
     state.user = null;
     state.isAuthenticated = false;
     state.loading = false;
-    state.error = null; 
+    state.error = null;
   });
+
 });
 
 export default userReducer;
