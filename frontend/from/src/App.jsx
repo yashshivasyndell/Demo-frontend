@@ -9,6 +9,7 @@ import  Dashboard  from './components/Dashboard';
 import { Layout } from './components/Layout';
 import Sidebar from './components/Sidebar';
 import { ToastContainer } from 'react-toastify';
+import Usertable from './components/Usertable';
 
 function App() {
   const dispatch = useDispatch();

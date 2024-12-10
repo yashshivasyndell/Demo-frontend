@@ -3,6 +3,7 @@ import Dashboard from '../components/Dashboard';
 import Gallary from '../components/Gallary';
 import Home from '../components/Home';
 import Profile from '../components/Profile';
+import Usertable from '../components/Usertable';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
   {
     path: '/profile',
     component: Profile,
+    authRequired: true,
+  },
+  {
+    path: '/table',
+    component: Usertable,
     authRequired: true,
   }
 ];

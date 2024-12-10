@@ -60,3 +60,16 @@ export const handlelogin = (loginCred) => async (dispatch) => {
       return error.response.data;
     }
   };
+
+  export const handleUserData =()=>async (dispatch)=>{
+      try{
+      dispatch({type:"ALL_USER_LOADING"})
+      const {data} = await axios.get('http://localhost:3000/users/dataset',jsonconfig)
+      dispatch({type:"ALL_USER_SUCCESS",payload:data})
+    }catch(error){
+      dispatch({type:"ALL_USER_ERROR",payload:error})
+      console.log("error: ",error);
+      return error.response.data
+    }
+ 
+  }

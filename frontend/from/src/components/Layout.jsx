@@ -5,11 +5,26 @@ import Outlet from './Outlet';
 
 export const Layout = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection:{sm:'column',lg:'row'},gap: 2,
-    padding: 3 }}>
-      <Sidebar/>
-      <Box component="main" sx={{ flexGrow: 1, padding: 3 }}>
-        <Outlet/>
+    <Box sx={{ display: 'flex',
+      height:'100vh',
+      overflow:'hidden',
+    }}>
+      
+      <Box sx={{width:'100px',
+        
+      }}>
+        <Sidebar/>
+      </Box>
+      <Box
+        component="main"
+        sx={{
+          overflowY: 'auto',
+          width:'80vw',
+          marginLeft:'140px',
+          height: '100vh'
+        }}
+      >
+        <Outlet />
       </Box>
     </Box>
   );
