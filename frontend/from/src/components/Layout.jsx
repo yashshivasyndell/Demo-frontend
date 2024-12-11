@@ -18,9 +18,9 @@ export const Layout = () => {
       <Box
         component="main"
         sx={{
-          overflowY: 'auto',
-          width:'80vw',
-          marginLeft:'140px',
+          overflowY: 'hidden',
+          width:'1000px',
+          marginLeft:'150px',
           height: '100vh'
         }}
       >
