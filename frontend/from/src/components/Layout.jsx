@@ -19,13 +19,14 @@ export const Layout = () => {
         component="main"
         sx={{
           overflowY: 'hidden',
-          width:'1000px',
+          width:'100%',
           marginLeft:'150px',
           height: '100vh'
         }}
       >
         <Outlet />
       </Box>
+
     </Box>
   );
 };

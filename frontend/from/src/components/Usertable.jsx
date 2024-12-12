@@ -17,7 +17,7 @@ import Select from "@mui/material/Select";
 import { Box } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DateRangePicker } from '@mui/x-date-pickers-pro';
-
+import { CiSearch } from "react-icons/ci";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from "dayjs";
 
@@ -44,6 +44,8 @@ export default function Usertable() {
   // Date Range filter
   const [dateRange, setDateRange] = useState([null, null]);
 
+  // shiwicon
+  const [showicon,setShowicon] = useState(false)
   // Handlers for each filter
   const handleGender = (event) => setGender(event.target.value);
   const handleEducation = (event) => setEducation(event.target.value);
@@ -60,6 +62,7 @@ export default function Usertable() {
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
+    setShowicon(event.target.value.trim() === "");
     setPage(0);
   };
 
@@ -101,14 +104,15 @@ export default function Usertable() {
 
   return (
     <>
-    <div className="flex justify-between mb-8">
+    <div className="mx-auto text-3xl pb-3">All Users</div>
+    <div className="flex justify-between mb-5">
       <div className="bg-blue-900 h-[100px] w-[200px] rounded-lg text-white items-center flex flex-col justify-start text-2xl font-semibold "><div className=" ml-[20px] text-3xl font-semibold">25</div> Total users</div>
       <div className="bg-blue-900 h-[100px] w-[200px] rounded-lg text-white items-center flex flex-col justify-start text-2xl font-semibold "><div className=" ml-[20px] text-3xl font-semibold">25</div> Total users</div>
       <div className="bg-blue-900 h-[100px] w-[200px] rounded-lg text-white items-center flex flex-col justify-start text-2xl font-semibold "><div className=" ml-[20px] text-3xl font-semibold">25</div> Total users</div>
       <div className="bg-blue-900 h-[100px] w-[200px] rounded-lg text-white items-center flex flex-col justify-start text-2xl font-semibold "><div className=" ml-[20px] text-3xl font-semibold">25</div> Total users</div>
     </div>
     {/* Filtering start here */}
-    <Box sx={{ padding: '0px', overflow: 'hidden',  }}>
+    <Box sx={{ height:'100vh'  }}>
   <Box
     sx={{
       display: "flex",
@@ -116,46 +120,52 @@ export default function Usertable() {
       alignContent: "center",
       justifyContent:'left',
       backgroundColor: '',
-      width: '100%',  
-      overflow: "hidden",  
-      
+      width: '100%',
+      overflow: "hidden",
     }}
   >
         {/* Search Bar */}
+        <div className="flex relative">
+        {showicon && (
+        <CiSearch className="absolute ml-20 top-3 text-gray-500" />
+      )}
         <TextField
-          label="Search"
+          label=""
+          placeholder="Search.."
           variant="outlined"
           fullWidth
           value={searchQuery}
           onChange={handleSearch}
-          sx={{ paddingRight: "20px",width:'300px', "& .MuiInputBase-root": { height: "40px" } }}
+          sx={{ paddingRight: "20px",width:'300px', "& .MuiInputBase-root": { height:'40px' } }}
           />
+          </div>
 
         {/* Gender filtering */}
         <FormControl
-          sx={{
-            width:'90px',
-            "& .MuiInputBase-root": {
-              height: "40px",
-            },
-            marginRight:'10px'
-          }}
-          >
-          <InputLabel id="gender-select-label">Gender</InputLabel>
-          <Select
-            sx={{ width: '90px',backgroundColor:'white' }}
-            labelId="gender-select-label"
-            id="gender-select"
-            value={gender}
-            label="Gender"
-            onChange={handleGender}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value={"male"}>Male</MenuItem>
-            <MenuItem value={"female"}>Female</MenuItem>
-            <MenuItem value={"other"}>Other</MenuItem>
-          </Select>
-        </FormControl>
+  sx={{
+    width: '120px',
+    "& .MuiInputBase-root": {
+      height: "40px",
+    },
+    marginRight: '10px',
+  }}
+>
+  <Select
+    sx={{ width: '120px', backgroundColor: 'white' }}
+    value={gender} 
+    onChange={handleGender}
+    displayEmpty 
+    inputProps={{ 'aria-label': 'Gender' }}
+  >
+    {/* Placeholder visible when value is empty */}
+    <MenuItem value="" disabled>
+      Select Gender
+    </MenuItem>
+    <MenuItem value={"male"}>Male</MenuItem>
+    <MenuItem value={"female"}>Female</MenuItem>
+    <MenuItem value={"other"}>Other</MenuItem>
+  </Select>
+</FormControl>
 
         {/* Education filtering */}
         <FormControl
@@ -174,6 +184,7 @@ export default function Usertable() {
             id="education-select"
             value={education}
             label="Education"
+            placeholder="Education"
             onChange={handleEducation}
             >
             <MenuItem value="">All</MenuItem>
@@ -253,77 +264,77 @@ export default function Usertable() {
             />
         </LocalizationProvider>
       </Box>
-    <TableContainer
-      component={Paper}
+  {/* Pagination */}
+  <div style={{ display: "flex",paddingBottom:'10px', justifyContent: "flex-end" }}>
+    <Pagination
+      count={Math.ceil(filteredData.length / rowsPerPage)}
+      page={page + 1}
+      onChange={handleChangePage}
+      color="primary"
+      />
+  </div>
+      <TableContainer
+  component={Paper}
+  sx={{
+    maxWidth: "100%",
+    margin: "0 auto",
+    height: "auto",
+    position: "relative",
+    maxHeight: "400px", 
+    overflowY: "auto",
+  }}
+  className="scrollbar-thin"  
+>
+  <div
+    style={{
+      width: "100%",
+      scrollbarWidth: "thin", 
+      msOverflowStyle: "none", 
+    }}
+  >
+    <Table
       sx={{
-        maxWidth: "100%",
-        margin: "0 auto",
-        height: "auto",
-        position: "relative",
-        maxHeight: "400px", 
-        overflowY: "auto",
+        width: "100%",
+        margin: 0,
+        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+        overflow: "auto",
       }}
-      >
-      <div
-        style={{
-          width: "100%",
-          scrollbarWidth: "none", 
-          msOverflowStyle: "none",
-        }}
-        >
-            {/* Pagination */}
-            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
-              <Pagination
-                count={Math.ceil(filteredData.length / rowsPerPage)}
-                page={page + 1}
-                onChange={handleChangePage}
-                color="primary"
-                />
-            </div>
-        <Table
-          sx={{
-            width: "100%",
-            margin: 0,
-            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
-            overflow:'auto'
-          }}
-          aria-label="user table"
-          >
-          <TableHead>
-            <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell align="center">Phone Number</TableCell>
-              <TableCell align="center">Username</TableCell>
-              <TableCell align="center">DOB</TableCell>
-              <TableCell align="center">Gender</TableCell>
-              <TableCell align="center">Education</TableCell>
-              <TableCell align="center">Country</TableCell>
-              <TableCell align="center">Role</TableCell>
-              <TableCell align="center">Created</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-                {paginatedData.map((row) => (
-                  <TableRow key={row._id}>
-                    <TableCell>{row.email || 'NA'}</TableCell>
-                    <TableCell align="center">{row.phoneNumber || 'NA'}</TableCell>
-                    <TableCell align="center">{row.username || 'NA'}</TableCell>
-                    <TableCell align="center">{row.dateofbirth || 'NA'}</TableCell>
-                    <TableCell align="center">{row.gender || 'NA'}</TableCell>
-                    <TableCell align="center">{row.education || 'NA'}</TableCell>
-                    <TableCell align="center">{row.country || 'NA'}</TableCell>
-                    <TableCell align="center">{row.role || 'NA'}</TableCell>
-                    <TableCell align="center">
-                      {row.created ? new Date(row.created).toLocaleDateString() : 'NA'}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+      aria-label="user table"
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>Email</TableCell>
+          <TableCell align="center">Phone Number</TableCell>
+          <TableCell align="center">Username</TableCell>
+          <TableCell align="center">DOB</TableCell>
+          <TableCell align="center">Gender</TableCell>
+          <TableCell align="center">Education</TableCell>
+          <TableCell align="center">Country</TableCell>
+          <TableCell align="center">Role</TableCell>
+          <TableCell align="center">Created</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {paginatedData.map((row) => (
+          <TableRow key={row._id}>
+            <TableCell>{row.email || "NA"}</TableCell>
+            <TableCell align="center">{row.phoneNumber || "NA"}</TableCell>
+            <TableCell align="center">{row.username || "NA"}</TableCell>
+            <TableCell align="center">{row.dateofbirth || "NA"}</TableCell>
+            <TableCell align="center">{row.gender || "NA"}</TableCell>
+            <TableCell align="center">{row.education || "NA"}</TableCell>
+            <TableCell align="center">{row.country || "NA"}</TableCell>
+            <TableCell align="center">{row.role || "NA"}</TableCell>
+            <TableCell align="center">
+              {row.created ? new Date(row.created).toLocaleDateString() : "NA"}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+</TableContainer>
 
-        </Table>
-      </div>
-
-    </TableContainer>
       </Box>
           </>
   );

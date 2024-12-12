@@ -1,4 +1,5 @@
 
+import AdminPanel from '../components/AdminPanel';
 import Dashboard from '../components/Dashboard';
 import Gallary from '../components/Gallary';
 import Home from '../components/Home';
@@ -30,6 +31,11 @@ const routes = [
   {
     path: '/table',
     component: Usertable,
+    authRequired: true,
+  },
+  {
+    path: '/adminpanel',
+    component: AdminPanel,
     authRequired: true,
   }
 ];

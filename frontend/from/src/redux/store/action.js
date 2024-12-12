@@ -65,7 +65,7 @@ export const handlelogin = (loginCred) => async (dispatch) => {
       try{
       dispatch({type:"ALL_USER_LOADING"})
       const {data} = await axios.get('http://localhost:3000/users/dataset',jsonconfig)
-      const countries = data.data.map((item) => item.country);
+      const countries = data.data.map((item) => item);
       console.log(countries); 
       dispatch({type:"ALL_USER_SUCCESS",payload:data})
     }catch(error){

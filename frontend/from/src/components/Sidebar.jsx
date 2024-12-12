@@ -16,6 +16,10 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Outlet } from "react-router-dom";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { MdOutlinePassword } from "react-icons/md";
+import { FaImages } from "react-icons/fa";
+
 import { handlelogout } from "../redux/store/action";
 function Sidebar() {
   const [open, setOpen] = React.useState(false);
@@ -58,6 +62,9 @@ function Sidebar() {
     navigate("/profile");
   };
 
+  const handleAdmin =()=>{
+    navigate("/adminpanel")
+  }
   const handleGallary = () => {
     navigate("/gallary");
   };
@@ -129,7 +136,7 @@ function Sidebar() {
           className="flex items-center"
         >
           <ListItemIcon sx={{color:location.pathname==="/profile"? 'black':'white'}}>
-            <Person2OutlinedIcon />
+          <MdOutlinePassword />
           </ListItemIcon>
           <ListItemText primary={"Profile"} />
         </ListItemButton>
@@ -151,6 +158,24 @@ function Sidebar() {
           <ListItemText primary={"User Table"} />
         </ListItemButton>
 
+        {/*adminpanel*/}
+         <ListItemButton
+          onClick={handleAdmin}
+          selected={location.pathname === "/adminpanel"}
+          sx={{
+            backgroundColor:
+              location.pathname === "/adminpanel" ? "blue" : "transparent",
+            "&.Mui-selected": {  backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black'},
+            marginBottom: "15px",
+          }}
+          className="flex items-center"
+        >
+          <ListItemIcon sx={{color:location.pathname==="/adminpanel"? 'black':'white'}}>
+            <MdAdminPanelSettings />
+          </ListItemIcon>
+          <ListItemText primary={"Admin Panel"} />
+        </ListItemButton>
+
         {/*login*/}
         <ListItemButton
           onClick={handleGallary}
@@ -162,7 +187,8 @@ function Sidebar() {
           className="flex items-center"
         >
           <ListItemIcon sx={{color:location.pathname==='/gallary'?'black':'white'}}>
-            <LockOpenOutlinedIcon />
+          <FaImages />
+
           </ListItemIcon>
           <ListItemText primary={"Gallary"} />
         </ListItemButton>

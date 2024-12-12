@@ -5,7 +5,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        scrollbarTrack: '#f1f1f1',
+        scrollbarThumb: '#888',
+        scrollbarThumbHover: '#555',
+      },
+    },
   },
   plugins: [],
 }
