@@ -61,7 +61,7 @@ export default function Usertable() {
   };
 
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
+    setSearchQuery(event.target.value.toLowerCase())
     setShowicon(event.target.value.trim() === "");
     setPage(0);
   };
@@ -303,8 +303,8 @@ export default function Usertable() {
     >
       <TableHead>
         <TableRow>
-          <TableCell>Email</TableCell>
-          <TableCell align="center">Phone Number</TableCell>
+          <TableCell>Email😎</TableCell>
+          <TableCell align="center">Phone Number😉</TableCell>
           <TableCell align="center">Username</TableCell>
           <TableCell align="center">DOB</TableCell>
           <TableCell align="center">Gender</TableCell>
@@ -319,6 +319,7 @@ export default function Usertable() {
           <TableRow key={row._id}>
             <TableCell>{row.email || "NA"}</TableCell>
             <TableCell align="center">{row.phoneNumber || "NA"}</TableCell>
+   
             <TableCell align="center">{row.username || "NA"}</TableCell>
             <TableCell align="center">{row.dateofbirth || "NA"}</TableCell>
             <TableCell align="center">{row.gender || "NA"}</TableCell>
@@ -330,6 +331,7 @@ export default function Usertable() {
             </TableCell>
           </TableRow>
         ))}
+        
       </TableBody>
     </Table>
   </div>

@@ -3,7 +3,10 @@ import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
     loading:true,
     error:null,
-    user:[]
+    user:[],
+    verifiedUsers: 0,
+    pendingUsers: 0,
+    guestUser: 0
 }
 
 const dataReducer = createReducer(initialState,(builder)=>{
@@ -16,6 +19,9 @@ const dataReducer = createReducer(initialState,(builder)=>{
         state.loading = false   ,
         state.user = action.payload.data
         state.error = null
+        state.verifiedUsers = action.payload.verifiedUsers;
+        state.pendingUsers = action.payload.pendingUsers;
+        state.guestUser = action.payload.guestUser
 
     })
     builder.addCase('ALL_USER_ERROR',(state,action)=>{
