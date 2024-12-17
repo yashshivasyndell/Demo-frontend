@@ -8,7 +8,6 @@ import { handleUserData } from "../redux/store/action";
 
 const AdminPanel = () => {
   const { user, loading, error } = useSelector((state) => state.getData);
-
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsperpage, setRowsperpage] = useState(10);
@@ -18,20 +17,21 @@ const AdminPanel = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-
+  const [year, setYear] = useState(""); 
+  const [currentDate, setCurrentDate] = useState(new Date());
   // Date filter states
   const [customFilter, setCustomFilter] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [filteredByDate, setFilteredByDate] = useState(false);
-
+  const [applyFilter, setApplyFilter] = useState(false);
   const indexOfLastitem = currentPage * rowsperpage;
   const indexOfFirstitem = indexOfLastitem - rowsperpage;
 
   // Handle Apply Filter Button
   const handleApplyFilter = () => {
     setFilteredByDate(true);
+    setApplyFilter(true)
     setCurrentPage(1);
   };
 
@@ -44,66 +44,133 @@ const AdminPanel = () => {
     setStartDate(null);
     setEndDate(null);
     setFilteredByDate(false);
+    setApplyFilter(false)
   };
 
   // Filter the data based on the search and selected filters
   const filteredData = user.filter((item) => {
+    if (!applyFilter) return true;
     const matchesSearchTerm =
       item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.email.toLowerCase().includes(searchTerm.toLowerCase());
+  
     const matchesGender = selectedGender
       ? item.gender === selectedGender
       : true;
+  
     const matchesEducation = selectedEducation
       ? item.education === selectedEducation
       : true;
+  
     const matchesCountry = selectedCountry
       ? item.country === selectedCountry
       : true;
-    // Date filter logic
+  
+    // Calculate the current custom date range
+    const itemDate = new Date(item.created); 
+    let matchesCustomDate = true;
+  
+    if (customFilter === "day") {
+      matchesCustomDate =
+        itemDate.toDateString() === currentDate.toDateString(); // Same day comparison
+    } else if (customFilter === "Week") {
+      const startOfWeek = new Date(currentDate);
+      startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      matchesCustomDate =
+        itemDate >= startOfWeek && itemDate <= endOfWeek; // Date falls within the current week
+    } else if (customFilter === "Month") {
+      const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      matchesCustomDate =
+        itemDate >= startOfMonth && itemDate <= endOfMonth; // Date falls within the current month
+    }
+  
+    // Date picker logic (Start and End Date)
     const matchesDate =
       !filteredByDate ||
       (startDate && endDate
-        ? new Date(item.created) >= new Date(startDate) &&
-          new Date(item.created) <= new Date(endDate)
+        ? itemDate >= new Date(startDate) && itemDate <= new Date(endDate)
         : true);
-
+  
+    // Combine all filters
     return (
       matchesSearchTerm &&
       matchesGender &&
       matchesEducation &&
       matchesCountry &&
-      matchesDate
+      matchesDate &&
+      matchesCustomDate
     );
   });
+  
+      
+      const currentItem = filteredData.slice(indexOfFirstitem, indexOfLastitem);
+      
+      const handleNextPage = () => {
+        if (currentPage < Math.ceil(filteredData.length / rowsperpage)) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      };
+      
+      const handlePreviousPage = () => {
+        if (currentPage > 1) {
+          setCurrentPage((prev) => prev - 1);
+        }
+      };
 
-  const currentItem = filteredData.slice(indexOfFirstitem, indexOfLastitem);
-
-  const handleNextPage = () => {
-    if (currentPage < Math.ceil(filteredData.length / rowsperpage)) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  const handleSearch = (event) => {
+    const handleSearch = (event) => {
     const query = event.target.value.trim().toLowerCase();
     setSearchTerm(query);
     setCurrentPage(1);
   };
 
-  const handleCustom =()=>{
+  const handleCustom =(e)=>{
     setCustomFilter(e.target.value);
   }
   useEffect(() => {
     dispatch(handleUserData());
   }, [dispatch]);
 
+  // Format date to "Tuesday, 17 Dec 2024"
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+};
+
+// Get the Week range
+const getWeekRange = (date) => {
+  const startOfWeek = new Date(date);
+  startOfWeek.setDate(date.getDate() - date.getDay()); 
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); 
+  return `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`;
+};
+
+// Get the Month range
+const getMonthRange = (date) => {
+  const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  return `${formatDate(startOfMonth)} - ${formatDate(endOfMonth)}`;
+};
+
+// Handle left and right arrow clicks
+const handleArrowClick = (direction) => {
+  const newDate = new Date(currentDate);
+  if (customFilter === "day") {
+    newDate.setDate(newDate.getDate() + (direction === "left" ? -1 : 1));
+  } else if (customFilter === "Week") {
+    newDate.setDate(newDate.getDate() + (direction === "left" ? -7 : 7));
+  } else if (customFilter === "Month") {
+    newDate.setMonth(newDate.getMonth() + (direction === "left" ? -1 : 1));
+  }
+  setCurrentDate(newDate);
+};
   //Country array
   const allContries = [
     { name: "Afghanistan", code: "AF" },
@@ -407,35 +474,35 @@ const AdminPanel = () => {
         <div className="flex gap-3 justify-center">
           {/*Custom*/}
           <select
-            name="customFilter"
-            id="customFilter"
-            onChange={handleCustom}
-            value={customFilter}
-            className="w-[110px] text-center rounded-md h-[35px]"
-          >
-            <option value="">Custom</option>
-            <option value={day}>
-              Day
-            </option>
-            <option value={month} >
-              Month
-            </option>
-            <option value={year}>
-              Year
-            </option>
-          </select>
+        name="customFilter"
+        id="customFilter"
+        onChange={handleCustom}
+        value={customFilter}
+        className="w-[110px] text-center rounded-md h-[35px]"
+      >
+        <option value="">Custom</option>
+        <option value="day">Day</option>
+        <option value="Week">Week</option>
+        <option value="Month">Month</option>
+      </select>
           {/*custom input*/}
           {customFilter && (
-        <div className="bg-white w-[800px] h-[40px] flex items-center justify-between rounded-xl">
-          <span className="text-3xl text-blue-300">
+        <div className="bg-white w-[550px] h-[40px] flex items-center justify-between rounded-xl">
+          <span
+            className="text-3xl text-blue-300 cursor-pointer"
+            onClick={() => handleArrowClick("left")}
+          >
             <FaArrowAltCircleLeft />
           </span>
           <span className="text-gray-700 text-lg">
-            {customFilter === "day" && "Day View"}
-            {customFilter === "month" && "Month View"}
-            {customFilter === "year" && "Year View"}
+            {customFilter === "day" && formatDate(currentDate)}
+            {customFilter === "Week" && getWeekRange(currentDate)}
+            {customFilter === "Month" && getMonthRange(currentDate)}
           </span>
-          <span className="text-3xl text-blue-300">
+          <span
+            className="text-3xl text-blue-300 cursor-pointer"
+            onClick={() => handleArrowClick("right")}
+          >
             <FaArrowAltCircleRight />
           </span>
         </div>
