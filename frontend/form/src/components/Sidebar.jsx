@@ -1,79 +1,41 @@
-import axios from "axios";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { loadUser } from "../redux/store/action";
-import zoundslike from "../assets/download.png";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { Outlet } from "react-router-dom";
-import { MdAdminPanelSettings } from "react-icons/md";
-import { MdOutlinePassword } from "react-icons/md";
-import { FaImages } from "react-icons/fa";
-
+import { useDispatch } from "react-redux";
 import { handlelogout } from "../redux/store/action";
+import { useMediaQuery, Drawer, Box, List, Divider, ListItemButton, ListItemIcon, ListItemText, IconButton, Button } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { MdAdminPanelSettings, MdOutlinePassword } from "react-icons/md";
+import { FaImages } from "react-icons/fa";
+import zoundslike from "../assets/download.png";
+import ListRoundedIcon from '@mui/icons-material/ListRounded';
+
 function Sidebar() {
-  const [open, setOpen] = React.useState(false);
-
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
-
+  const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
-  const handleLogout = async (e) => {
-    const logOut = dispatch(handlelogout());
-    e.preventDefault();
-    if (logOut) {
-      console.log("Logout Success");
-      navigate("/login");
-    } else {
-      console.log("Error in logging out");
-    }
+  // Check screen size (responsive)
+  const isMobile = useMediaQuery("(max-width:900px)");
+
+  // Toggle sidebar for mobile screens
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  {
-    /*register*/
-  }
-  const handleRegister = () => {
-    navigate("/dashboard");
-  };
-  {
-    /*Home*/
-  }
-  const handleHome = () => {
-    navigate("/home");
-  };
-  {
-    /*Profile*/
-  }
-  const handleProfile = () => {
-    navigate("/profile");
+  const handleLogout = () => {
+    dispatch(handlelogout());
+    navigate("/login");
   };
 
-  const handleAdmin =()=>{
-    navigate("/adminpanel")
-  }
-  const handleGallary = () => {
-    navigate("/gallary");
+  const handleNavigation = (route) => {
+    navigate(route);
   };
 
-  const handleTable = () => {
-    navigate("/table");
-  };
-
-  const DrawerList = (
+  // Sidebar content
+  const drawerContent = (
     <Box
       sx={{
         width: 250,
@@ -81,122 +43,55 @@ function Sidebar() {
         height: "100vh",
         color: "white",
       }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
     >
+      <div className="bg-[#87CEEB] h-[120px] flex items-center justify-center">
+        <div className="rounded-full shadow-lg shadow-gray-500">
+          <img className="h-14 w-14 rounded-full" src={zoundslike} alt="Logo" />
+        </div>
+      </div>
+
       <List>
-        {/*dashboard or home*/}
-        <ListItemButton
-          onClick={handleRegister}
-          selected={location.pathname === "/dashboard"}
-          sx={{
-            backgroundColor:
-              location.pathname === "/dashboard" ? "#B1F0F7" : "transparent",
-            "&:hover": { backgroundColor: "#A1D5DB" },
-            $hover: { backgroundColor: "#A1D5DB" },
-            "&.Mui-selected": {  backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black' },
-            marginBottom: "15px",
-          }}
-        >
-          <ListItemIcon sx={{color:location.pathname === "/dashboard" ? 'black':'white'}}>
+        <ListItemButton onClick={() => handleNavigation("/dashboard")}>
+          <ListItemIcon sx={{ color: "white" }}>
             <HomeOutlinedIcon />
           </ListItemIcon>
           <ListItemText primary={"Dashboard"} />
         </ListItemButton>
 
-        {/*users or register*/}
-        <ListItemButton
-          onClick={handleHome}
-          selected={location.pathname === "/home"}
-          sx={{
-            backgroundColor:
-              location.pathname === "/home" ? "blue" : "transparent",
-            "&.Mui-selected": { backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black'},
-            marginBottom: "15px",fontSize: "18px",
-            fontWeight: "bold",
-          }}
-          className="flex items-center"
-        >
-          <ListItemIcon sx={{color: location.pathname === "/home" ? 'black' : 'white'}}>
+        <ListItemButton onClick={() => handleNavigation("/home")}>
+          <ListItemIcon sx={{ color: "white" }}>
             <Person2OutlinedIcon />
           </ListItemIcon>
           <ListItemText primary={"Home"} />
         </ListItemButton>
 
-        {/*Profile or password reset*/}
-        <ListItemButton
-          onClick={handleProfile}
-          selected={location.pathname === "/profile"}
-          sx={{
-            backgroundColor:
-              location.pathname === "/profile" ? "blue" : "transparent",
-            "&.Mui-selected": {  backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black'},
-            marginBottom: "15px",
-          }}
-          className="flex items-center"
-        >
-          <ListItemIcon sx={{color:location.pathname==="/profile"? 'black':'white'}}>
-          <MdOutlinePassword />
+        <ListItemButton onClick={() => handleNavigation("/profile")}>
+          <ListItemIcon sx={{ color: "white" }}>
+            <MdOutlinePassword />
           </ListItemIcon>
           <ListItemText primary={"Profile"} />
         </ListItemButton>
-         {/*table*/}
-         <ListItemButton
-          onClick={handleTable}
-          selected={location.pathname === "/table"}
-          sx={{
-            backgroundColor:
-              location.pathname === "/table" ? "blue" : "transparent",
-            "&.Mui-selected": {  backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black'},
-            marginBottom: "15px",
-          }}
-          className="flex items-center"
-        >
-          <ListItemIcon sx={{color:location.pathname==="/table"? 'black':'white'}}>
-            <Person2OutlinedIcon />
-          </ListItemIcon>
-          <ListItemText primary={"User Table"} />
-        </ListItemButton>
 
-        {/*adminpanel*/}
-         <ListItemButton
-          onClick={handleAdmin}
-          selected={location.pathname === "/adminpanel"}
-          sx={{
-            backgroundColor:
-              location.pathname === "/adminpanel" ? "blue" : "transparent",
-            "&.Mui-selected": {  backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black'},
-            marginBottom: "15px",
-          }}
-          className="flex items-center"
-        >
-          <ListItemIcon sx={{color:location.pathname==="/adminpanel"? 'black':'white'}}>
+        <ListItemButton onClick={() => handleNavigation("/adminpanel")}>
+          <ListItemIcon sx={{ color: "white" }}>
             <MdAdminPanelSettings />
           </ListItemIcon>
           <ListItemText primary={"Admin Panel"} />
         </ListItemButton>
 
-        {/*login*/}
-        <ListItemButton
-          onClick={handleGallary}
-          selected={location.pathname === "/gallary"}
-          sx={{
-            "&.Mui-selected": { backgroundColor: "#fff" ,borderRadius:'15px',margin:'6px',color:'black' },
-            marginBottom: "20px",
-          }}
-          className="flex items-center"
-        >
-          <ListItemIcon sx={{color:location.pathname==='/gallary'?'black':'white'}}>
-          <FaImages />
-
+        <ListItemButton onClick={() => handleNavigation("/gallary")}>
+          <ListItemIcon sx={{ color: "white" }}>
+            <FaImages />
           </ListItemIcon>
-          <ListItemText primary={"Gallary"} />
+          <ListItemText primary={"Gallery"} />
         </ListItemButton>
       </List>
-      <Divider/>
+
+      <Divider />
+
       <List>
-        <ListItemButton onClick={handleLogout} className="flex items-center">
-          <ListItemIcon sx={{color:location.pathname==='logout'?'black':'white'}}>
+        <ListItemButton onClick={handleLogout}>
+          <ListItemIcon sx={{ color: "white" }}>
             <LogoutOutlinedIcon />
           </ListItemIcon>
           <ListItemText primary={"Log Out"} />
@@ -204,21 +99,46 @@ function Sidebar() {
       </List>
     </Box>
   );
+
   return (
-    <div>
-      <Drawer variant="permanent">
-        <div className="bg-[#87CEEB] h-[120px] flex items-center justify-center">
-          <div className="rounded-full shadow-lg shadow-gray-500">
-            <img
-              className="h-14 w-14 rounded-full"
-              src={zoundslike}
-              alt="Logo"
-            />
-          </div>
-        </div>
-        {DrawerList}
+    <>
+      {/* Menu Button for Mobile Screens */}
+      {isMobile && (
+        <ListRoundedIcon
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{
+            position: "fixed", 
+            top: 10, 
+            left: 10, 
+            zIndex: 1000, 
+            color: "black", 
+          }}
+        >
+          <MenuIcon />
+        </ListRoundedIcon>
+      )}
+
+      {/* Sidebar (for Mobile and Desktop) */}
+      <Drawer
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Improve performance on mobile
+        }}
+        sx={{
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: 250,
+          },
+        }}
+      >
+        {drawerContent}
       </Drawer>
-    </div>
+    </>
   );
 }
 

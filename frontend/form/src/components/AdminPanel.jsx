@@ -20,7 +20,7 @@ const AdminPanel = () => {
   const [year, setYear] = useState(""); 
   const [currentDate, setCurrentDate] = useState(new Date());
   // Date filter states
-  const [customFilter, setCustomFilter] = useState("");
+  const [customFilter, setCustomFilter] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [filteredByDate, setFilteredByDate] = useState(false);
@@ -45,6 +45,7 @@ const AdminPanel = () => {
     setEndDate(null);
     setFilteredByDate(false);
     setApplyFilter(false)
+    setCustomFilter(false)
   };
 
   // Filter the data based on the search and selected filters
@@ -445,40 +446,37 @@ const handleArrowClick = (direction) => {
   ).length;
 
   //Date variables
-
   return (
-    <div className="overflow-x-none overflow-y-scroll h-[100%]">
+    <div className="overflow-x-none overflow-y-auto h-[100%]">
       <div className="font-semibold text-2xl text-center">All Users</div>
-
       {/* Filter Boxes and Reset Button */}
-      <div className="flex gap-4 justify-center mt-5">
+      <div className="flex gap-2 justify-center mt-5">
         {/* Filter Boxes */}
-        <div className="flex gap-3">
-          <div className="w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
+        <div className="flex flex-col p-3 w-full lg:flex-row gap-3 justify-center">
+          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
             {filteredData.length} Total Users
           </div>
-          <div className="w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
+          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
             {verifiedUsers} Verified Users
           </div>
-          <div className="w-56 h-28 bg-[#3E5879] text-white flex  justify-center rounded-lg items-center text-lg">
+          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex  justify-center rounded-lg items-center text-lg">
             {pendingUsers} Pending
           </div>
-          <div className="w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
+          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
             {guestUsers} Guest Users
           </div>
         </div>
       </div>
-
       {/* Filters and Date Picker */}
       <div className="flex flex-col justify-between mt-5">
-        <div className="flex gap-3 justify-center">
+        <div className="flex flex-col mx-auto lg:flex lg:flex-row gap-3 justify-center">
           {/*Custom*/}
           <select
         name="customFilter"
         id="customFilter"
         onChange={handleCustom}
         value={customFilter}
-        className="w-[110px] text-center rounded-md h-[35px]"
+        className="w-[80vw] mx-auto lg:w-[110px] text-center rounded-md h-[35px]"
       >
         <option value="">Custom</option>
         <option value="day">Day</option>
@@ -487,7 +485,7 @@ const handleArrowClick = (direction) => {
       </select>
           {/*custom input*/}
           {customFilter && (
-        <div className="bg-white w-[550px] h-[40px] flex items-center justify-between rounded-xl">
+        <div className="w-[80vw] m-2 text-center bg-white lg:w-[550px] h-[40px] flex items-center justify-between rounded-xl">
           <span
             className="text-3xl text-blue-300 cursor-pointer"
             onClick={() => handleArrowClick("left")}
@@ -547,16 +545,15 @@ const handleArrowClick = (direction) => {
             Reset Filters
           </button>
         </div>
-
         {/* Other Filters */}
-        <div className="flex gap-4 justify-center mt-4">
+        <div className="grid lg:flex gap-4 justify-center mt-4">
           {/* Search Bar */}
           <div className="relative">
-            <FaSearch className="absolute top-1 left-14" />
+            <FaSearch className="absolute top-2 left-3" />
             <input
               type="text"
               placeholder="Search"
-              className="h-[35px] text-center w-[200px] rounded-lg outline-none"
+              className="w-[80vw] h-[35px] lg:h-[35px] text-center lg:w-[200px] rounded-lg outline-none"
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -565,7 +562,7 @@ const handleArrowClick = (direction) => {
           {/* Gender Filter */}
           <select
             name="gender"
-            className="w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
             value={selectedGender}
             onChange={(e) => setSelectedGender(e.target.value)}
           >
@@ -578,7 +575,7 @@ const handleArrowClick = (direction) => {
           {/* Education Filter */}
           <select
             name="education"
-            className="w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
             value={selectedEducation}
             onChange={(e) => setSelectedEducation(e.target.value)}
           >
@@ -591,7 +588,7 @@ const handleArrowClick = (direction) => {
           {/* Country Filter */}
           <select
             name="country"
-            className="w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
             value={selectedCountry}
             onChange={(e) => setSelectedCountry(e.target.value)}
           >
@@ -610,8 +607,8 @@ const handleArrowClick = (direction) => {
 
       {/*pagination*/}
       <div className="flex justify-between mt-2">
-        <span className="ml-11 text-lg">Users: {filteredData.length}</span>
-        <div className="flex mr-10 gap-4 text-lg">
+        <span className="ml-11 text-sm flex flex-col lg:text-lg">Users:{filteredData.length}</span>
+        <div className="flex text-sm mr-4 gap-2 lg:text-lg">
           <span className="mr-8">
             {indexOfFirstitem + 1}-
             {Math.min(indexOfLastitem, filteredData.length)} of{" "}
@@ -632,84 +629,86 @@ const handleArrowClick = (direction) => {
         </div>
       </div>
       {/* Table of Users */}
-      <div className="flex justify-center items-center mt-2 overflow-auto">
-        <div className="w-[75vw] max-w-screen-xl">
-          <div className="h-[600px] overflow-y-auto border border-gray-300 rounded-md">
-            <table className="min-w-full bg-white border-collapse border-gray-300 shadow-lg">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    S.No
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Username
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Email
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    DOB
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Gender
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Education
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Country
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Role
-                  </th>
-                  <th className="px-4 py-2 border border-gray-300 text-left">
-                    Created
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItem.map((item, index) => (
-                  <tr key={item.id} className="hover:bg-gray-100">
-                    <td className="px-2 py-1 border border-gray-300">
-                      {index + 1}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.username}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.email || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.dateofbirth || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.gender || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.education || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.country || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {item.role || "n/a"}
-                    </td>
-                    <td className="px-2 py-1 border border-gray-300">
-                      {new Date(item.created).toLocaleDateString("en-US") ||
-                        "N/A"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div className="flex justify-center items-center mt-2 overflow-y-auto">
+  <div className="w-[90vw] lg:w-[75vw] max-w-screen-xl">
+    <div className="h-auto overflow-y-auto border border-gray-300 rounded-md">
+      <div className=" max-h-[400px]"> {/* Add a max-height here */}
+        <table className="min-w-full bg-white border-collapse border-gray-300 shadow-lg">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                S.No
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Username
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Email
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                DOB
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Gender
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Education
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Country
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Role
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Created
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItem.map((item, index) => (
+              <tr key={item.id} className="hover:bg-gray-100">
+                <td className="px-2 py-1 border border-gray-300">
+                  {index + 1}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.username}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.email || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.dateofbirth || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.gender || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.education || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.country || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {item.role || "n/a"}
+                </td>
+                <td className="px-2 py-1 border border-gray-300">
+                  {new Date(item.created).toLocaleDateString("en-US") || "N/A"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+</div>
+
 
       {/* Pagination */}
       <div className="flex justify-between mt-2">
-        <span className="ml-11 text-lg">Users: {filteredData.length}</span>
-        <div className="flex mr-10 gap-4 text-lg">
+        <span className="ml-11 text-sm lg:text-lg">Users:{filteredData.length}</span>
+        <div className="flex mr-4 gap-4 text-sm lg:text-lg">
           <span className="mr-8">
             {indexOfFirstitem + 1}-
             {Math.min(indexOfLastitem, filteredData.length)} of{" "}

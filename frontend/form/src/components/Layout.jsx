@@ -1,33 +1,34 @@
-// Layout.js
-import { Box } from '@mui/material';
-import Sidebar from './Sidebar';
-import Outlet from './Outlet';
+import React from "react";
+import { Box, useMediaQuery } from "@mui/material";
+import Sidebar from "./Sidebar";
+import Outlet from "./Outlet";
 
 export const Layout = () => {
+  const isMobile = useMediaQuery("(max-width:900px)");
+
   return (
-    <Box sx={{ display: 'flex',
-      height:'100vh',
-      overflow:'hidden',
-    }}>
-      
-      <Box sx={{width:'100px',
-        
-      }}>
-        <Sidebar/>
-      </Box>
+    <Box
+      sx={{
+        display: "flex",
+        height: "auto",
+        overflow: "hidden",
+      }}
+    >
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main Content */}
       <Box
+      
         component="main"
         sx={{
-          overflowY: 'hidden',
-          width:'100%',
-          marginLeft:'150px',
-          height: '100vh'
+          flexGrow: 1,
+          overflowY: "hidden",
+          marginLeft: isMobile ? 0 : "250px", // Adjust margin for mobile screen
         }}
       >
         <Outlet />
       </Box>
-
     </Box>
   );
 };
-

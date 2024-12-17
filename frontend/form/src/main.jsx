@@ -6,12 +6,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'; 
 import Store  from './redux/store/Store.js'; 
 import 'react-toastify/dist/ReactToastify.css';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={Store}>
       <BrowserRouter>
-        <App />
+      <ThemeProvider theme={theme}>
+         <App />
+      </ThemeProvider>,
       </BrowserRouter>
     </Provider>
   </StrictMode>
