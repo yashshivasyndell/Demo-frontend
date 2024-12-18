@@ -1,4 +1,5 @@
 
+import Addwords from '../components/Addwords';
 import AdminPanel from '../components/AdminPanel';
 import Dashboard from '../components/Dashboard';
 import Gallary from '../components/Gallary';
@@ -37,7 +38,13 @@ const routes = [
     path: '/adminpanel',
     component: AdminPanel,
     authRequired: true,
+  },
+  {
+    path: '/addword',
+    component: Addwords,
+    authRequired: true,
   }
+  
 ];
 
 export default routes;

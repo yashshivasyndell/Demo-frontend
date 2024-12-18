@@ -103,19 +103,19 @@ function Sidebar() {
           <ListItemIcon sx={{color:selectedRoute==='/profile'?'black':"white"}}>
             <LuPencil />
           </ListItemIcon>
-          <ListItemText primary={"Addwords"} />
+          <ListItemText primary={"Profile"} />
         </ListItemButton>
 
 
-        <ListItemButton sx={{backgroundColor:selectedRoute === '/manage'?'white':'transparent',
-          color:selectedRoute==='/gallary'?'black':'white',
+        <ListItemButton sx={{backgroundColor:selectedRoute === '/addword'?'white':'transparent',
+          color:selectedRoute==='/addword'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}} onClick={() => handleNavigation("/manage")}>
-          <ListItemIcon sx={{color:selectedRoute==='/manage'?'black':"white"}}>
+          },margin:"0 7px 0 7px",borderRadius:"10px"}} onClick={() => handleNavigation("/addword")}>
+          <ListItemIcon sx={{color:selectedRoute==='/addword'?'black':"white"}}>
             <MdOutlineSpeakerNotes />
           </ListItemIcon>
-          <ListItemText primary={"Manage Words"} />
+          <ListItemText primary={"Add Words"} />
         </ListItemButton>
 
         <ListItemButton sx={{backgroundColor:selectedRoute === '/game'?'white':'transparent',
