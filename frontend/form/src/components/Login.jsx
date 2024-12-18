@@ -91,38 +91,35 @@ export const Login = () => {
     }, 1000);
   };
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-[#1F509A] px-10 py-20 flex flex-col rounded-md shadow-2xl">
-        <div className="mx-auto mt-[-60px]">
-          
-        </div>
-        <h2 className="text-4xl text-white font-thin m-10">Welcome back</h2>
-        <form action="" autoComplete="off">
-          <div className="mb-5 text-white text-left grid gap-2">
-            <label htmlFor="">Email</label>
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-[#021b79] to-[#0575e6]">
+      <div className="bg-[#fff] w-[480px] flex flex-col rounded-md h-[300px] shadow-2xl">
+        <h2 className="text-4xl text-black text-center">Login</h2>
+        <form action="" autoComplete="on">
+          <div className=" text-white text-left grid pl-6 pr-6 ">
+            <label className="text-black" htmlFor="">Email</label>
             <input
               type="email"
               name="email"
               value={user.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="outline-none text-stone-500 bg-teal-200 rounded-lg p-2 border-white"
-              autoComplete="off"
+              className="outline-none text-stone-500 border-[1px] rounded-lg p-1 border-black"
+              autoComplete="on"
             />
           </div>
-          <div className="mb-5 text-white text-left grid gap-2 relative">
-            <label htmlFor="">Password</label>
+          <div className=" text-white text-left grid pl-6 pr-6 pt-3 relative">
+            <label htmlFor="" className="text-black">Password</label>
             <input
               type={showPass ? "text" : "password"}
               name="password"
               value={user.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className="outline-none bg-teal-200 text-stone-500 p-2 rounded-lg 
-             border-white"
-              autoComplete="off"
+              className="outline-none border-[1px] border-black text-stone-500 p-1 rounded-lg 
+             "
+              autoComplete="on"
             />
-            <div className="absolute bottom-[14px] right-[12px] text-black">
+            <div className="absolute bottom-[10px] right-[35px] text-black">
               {showPass ? (
                 <FaEye onClick={handlePassClick} />
               ) : (
@@ -131,16 +128,16 @@ export const Login = () => {
             </div>
           </div>
         </form>
-        <div className="flex flex-col gap-4 mt-3">
+        <div className="flex flex-row justify-between p-5 ">
           <button
             onClick={handleLogin}
-            className="text-white  p-2 bg-green-500 rounded-sm"
+            className="text-white p-2 bg-[#175676] rounded-md"
           >
             Login
           </button>
           <button
             onClick={handleSignin}
-            className="text-white p-2 bg-purple-500 rounded-sm"
+            className="text-white p-2 bg-[#175676] rounded-md"
           >
             SignUp
           </button>

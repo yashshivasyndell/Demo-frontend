@@ -5,6 +5,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
 import { handleUserData } from "../redux/store/action";
+import { IoIosArrowDropleftCircle } from "react-icons/io";
+import { IoIosArrowDroprightCircle } from "react-icons/io";
 
 const AdminPanel = () => {
   const { user, loading, error } = useSelector((state) => state.getData);
@@ -15,14 +17,11 @@ const AdminPanel = () => {
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedEducation, setSelectedEducation] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [day, setDay] = useState("");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState(""); 
   const [currentDate, setCurrentDate] = useState(new Date());
   // Date filter states
   const [customFilter, setCustomFilter] = useState(false);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
+  const [endDate, setEndDate] = useState(new Date().toLocaleDateString());
   const [filteredByDate, setFilteredByDate] = useState(false);
   const [applyFilter, setApplyFilter] = useState(false);
   const indexOfLastitem = currentPage * rowsperpage;
@@ -447,23 +446,43 @@ const handleArrowClick = (direction) => {
 
   //Date variables
   return (
-    <div className="overflow-x-none overflow-y-auto h-[100%]">
-      <div className="font-semibold text-2xl text-center">All Users</div>
+    <div className="overflow-x-none overflow-y-auto h-[100%] bg-[#EDEDED]">
+      <div className="font-semibold text-3xl text-center mt-5">Users List</div>
       {/* Filter Boxes and Reset Button */}
       <div className="flex gap-2 justify-center mt-5">
         {/* Filter Boxes */}
-        <div className="flex flex-col p-3 w-full lg:flex-row gap-3 justify-center">
-          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
-            {filteredData.length} Total Users
+        <div className="flex flex-col p-3 w-full lg:flex-row gap-8 justify-center">
+          <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
+            <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
+            {filteredData.length}
+            </div>
+            <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
+             Total Users
+            </div>
           </div>
-          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
-            {verifiedUsers} Verified Users
+          <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
+            <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
+            {verifiedUsers}
+            </div>
+            <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
+             verified Users
+            </div>
           </div>
-          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex  justify-center rounded-lg items-center text-lg">
-            {pendingUsers} Pending
+          <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
+            <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
+            {pendingUsers}
+            </div>
+            <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
+             Pending Users
+            </div>
           </div>
-          <div className="w-full lg:w-56 h-28 bg-[#3E5879] text-white flex justify-center rounded-lg items-center text-lg">
-            {guestUsers} Guest Users
+          <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
+            <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
+            {pendingUsers}
+            </div>
+            <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
+             Pending Users
+            </div>
           </div>
         </div>
       </div>
@@ -476,7 +495,7 @@ const handleArrowClick = (direction) => {
         id="customFilter"
         onChange={handleCustom}
         value={customFilter}
-        className="w-[80vw] mx-auto lg:w-[110px] text-center rounded-md h-[35px]"
+        className="w-[80vw] mx-auto lg:w-[240px] text-center rounded-md h-[45px] border-[1px] border-black"
       >
         <option value="">Custom</option>
         <option value="day">Day</option>
@@ -485,12 +504,12 @@ const handleArrowClick = (direction) => {
       </select>
           {/*custom input*/}
           {customFilter && (
-        <div className="w-[80vw] m-2 text-center bg-white lg:w-[550px] h-[40px] flex items-center justify-between rounded-xl">
+        <div className="w-[80vw] border-[1px] border-black text-center bg-white lg:w-[455px] h-[45px] flex items-center justify-between rounded-xl">
           <span
-            className="text-3xl text-blue-300 cursor-pointer"
+            className="text-3xl text-black cursor-pointer"
             onClick={() => handleArrowClick("left")}
           >
-            <FaArrowAltCircleLeft />
+            <FaArrowAltCircleLeft className="ml-2"/>
           </span>
           <span className="text-gray-700 text-lg">
             {customFilter === "day" && formatDate(currentDate)}
@@ -498,62 +517,62 @@ const handleArrowClick = (direction) => {
             {customFilter === "Month" && getMonthRange(currentDate)}
           </span>
           <span
-            className="text-3xl text-blue-300 cursor-pointer"
+            className="text-3xl text-black cursor-pointer"
             onClick={() => handleArrowClick("right")}
           >
-            <FaArrowAltCircleRight />
+            <FaArrowAltCircleRight className="mr-2"/>
           </span>
         </div>
       )}
           {/* Date Picker */}
           {!customFilter&&(
-            <><div className="flex gap-4 items-center">
-            <label>Start Date:</label>
+            <><div className="flex items-center">
+              <div className="relative">
+            <span className="absolute top-[9px] left-9 z-10 font-bold">From: </span>
             <DatePicker
               dateFormat={"dd-MM-yy"}
               maxDate={endDate ? new Date(endDate) : null}
               selected={startDate}
               onChange={(date) => setStartDate(date)}
-              className="rounded-lg h-9 text-center"
-              placeholderText="Select Start Date"
+              className="rounded-lg h-[43px] w-[230px] text-center border-[1px] border-black"
+              placeholderText={startDate}
             />
+            </div>
           </div>
 
-          <div className="flex gap-4 items-center">
-            <label>End Date:</label>
+          <div className="flex items-center">
+          <div className="relative">
+            <span className="absolute top-[9px] left-14 z-10 font-bold">To: </span>
             <DatePicker
-              minDate={startDate ? new Date(startDate) : null}
+              dateFormat={"dd-MM-yy"}
+              maxDate={startDate ? new Date(startDate) : null}
               selected={endDate}
               onChange={(date) => setEndDate(date)}
-              className="rounded-lg h-9 text-center"
-              placeholderText="Select End Date"
+              className="rounded-lg h-[43px] w-[230px] text-black text-center border-[1px] border-black"
+              placeholderText={startDate}
             />
+            </div>
           </div></>)}
 
           {/* Apply Filter Button */}
           <button
             onClick={handleApplyFilter}
-            className="bg-green-500 text-white p-2 rounded-lg"
+            className="bg-[#175676] text-white p-2 w-[200px] rounded-lg"
           >
             Apply Date Filter
           </button>
           {/* Reset Button */}
-          <button
-            onClick={handleResetFilters}
-            className="bg-red-500 text-white p-2 rounded-lg"
-          >
-            Reset Filters
-          </button>
+          
         </div>
         {/* Other Filters */}
-        <div className="grid lg:flex gap-4 justify-center mt-4">
+        <div className="grid lg:flex gap-1 justify-center mt-4">
           {/* Search Bar */}
-          <div className="relative">
-            <FaSearch className="absolute top-2 left-3" />
+          <div className="relative w-[80vw] lg:w-[277px]">
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-800 text-2xl " />
             <input
               type="text"
-              placeholder="Search"
-              className="w-[80vw] h-[35px] lg:h-[35px] text-center lg:w-[200px] rounded-lg outline-none"
+              placeholder="Search..."
+              className="w-full h-[35px] lg:h-[45px] pl-10 border-[1px] border-black rounded-md outline-none"
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -562,7 +581,7 @@ const handleArrowClick = (direction) => {
           {/* Gender Filter */}
           <select
             name="gender"
-            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[160px] rounded-md h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedGender}
             onChange={(e) => setSelectedGender(e.target.value)}
           >
@@ -575,7 +594,7 @@ const handleArrowClick = (direction) => {
           {/* Education Filter */}
           <select
             name="education"
-            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedEducation}
             onChange={(e) => setSelectedEducation(e.target.value)}
           >
@@ -588,7 +607,7 @@ const handleArrowClick = (direction) => {
           {/* Country Filter */}
           <select
             name="country"
-            className="w-[80vw] lg:w-[230px] rounded-lg h-[35px] text-center outline-none"
+            className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedCountry}
             onChange={(e) => setSelectedCountry(e.target.value)}
           >
@@ -602,65 +621,82 @@ const handleArrowClick = (direction) => {
                 );
               })}
           </select>
+          {/* Platform Filter */}
+          <select
+            name="country"
+            className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
+            value={selectedCountry}
+            onChange={(e) => setSelectedCountry(e.target.value)}
+          >
+            <option value="">Platform</option>
+            {allContries &&
+              allContries.map((countries) => {
+                return (
+                  <option key={countries.code} value={countries.code}>
+                    {countries.name}
+                  </option>
+                );
+              })}
+          </select>
         </div>
       </div>
 
       {/*pagination*/}
-      <div className="flex justify-between mt-2">
-        <span className="ml-11 text-sm flex flex-col lg:text-lg">Users:{filteredData.length}</span>
-        <div className="flex text-sm mr-4 gap-2 lg:text-lg">
-          <span className="mr-8">
+      <div className="flex justify-between mt-8 mb-8">
+        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">Users:{filteredData.length}</span>
+        <div className="flex text-sm mr-4  lg:text-lg">
+          <span className="mr-5 mt-3">
             {indexOfFirstitem + 1}-
             {Math.min(indexOfLastitem, filteredData.length)} of{" "}
             {filteredData.length}
           </span>
           <span
-            className="text-3xl text-blue-400 cursor-pointer"
+            className="text-4xl text-[#4ba3c3] cursor-pointer mr-[-6px]"
             onClick={handlePreviousPage}
           >
-            <FaArrowAltCircleLeft />
+            <IoIosArrowDropleftCircle className="text-[50px]"/>
           </span>
           <span
-            className="text-3xl text-blue-400 cursor-pointer"
+            className="text-4xl text-[#4ba3c3] cursor-pointer mr-4"
             onClick={handleNextPage}
           >
-            <FaArrowAltCircleRight />
+            <IoIosArrowDroprightCircle className="text-[50px] "/>
           </span>
         </div>
       </div>
       {/* Table of Users */}
-<div className="flex justify-center items-center mt-2 overflow-y-auto">
-  <div className="w-[90vw] lg:w-[75vw] max-w-screen-xl">
-    <div className="h-auto overflow-y-auto border border-gray-300 rounded-md">
-      <div className=" max-h-[400px]"> {/* Add a max-height here */}
-        <table className="min-w-full bg-white border-collapse border-gray-300 shadow-lg">
-          <thead className="bg-gray-200">
+<div className="flex justify-center items-center mt-2 ">
+  <div className="w-[90vw] lg:w-auto mx-auto max-w-screen-xl">
+    <div className="h-auto border border-gray-300 rounded-md">
+      <div className=" max-h-auto">
+        <table className="min-w-[60vw] bg-white border-collapse border-gray-300 shadow-lg">
+          <thead className="bg-white">
             <tr>
-              <th className="px-4 py-2 border border-gray-300 text-left">
-                S.No
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
+                Id
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Username
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Email
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 DOB
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Gender
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Education
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Country
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Role
               </th>
-              <th className="px-4 py-2 border border-gray-300 text-left">
+              <th className="px-4 py-7 border-b border-white text-left font-normal">
                 Created
               </th>
             </tr>
@@ -668,31 +704,31 @@ const handleArrowClick = (direction) => {
           <tbody>
             {currentItem.map((item, index) => (
               <tr key={item.id} className="hover:bg-gray-100">
-                <td className="px-2 py-1 border border-gray-300">
+                <td className="px-2 py-4 border-b text-center border-gray-300">
                   {index + 1}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
+                <td className="px-2 py-4 border-b text-center border-gray-300">
                   {item.username}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.email || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.email || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.dateofbirth || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.dateofbirth || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.gender || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.gender || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.education || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.education || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.country || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.country || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
-                  {item.role || "n/a"}
+                <td className="px-2 py-4 border-b text-center border-gray-300">
+                  {item.role || "N/A"}
                 </td>
-                <td className="px-2 py-1 border border-gray-300">
+                <td className="px-2 py-4 border-b text-center border-gray-300">
                   {new Date(item.created).toLocaleDateString("en-US") || "N/A"}
                 </td>
               </tr>
@@ -706,25 +742,25 @@ const handleArrowClick = (direction) => {
 
 
       {/* Pagination */}
-      <div className="flex justify-between mt-2">
-        <span className="ml-11 text-sm lg:text-lg">Users:{filteredData.length}</span>
-        <div className="flex mr-4 gap-4 text-sm lg:text-lg">
-          <span className="mr-8">
+      <div className="flex justify-between mt-8 mb-8">
+        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">Users:{filteredData.length}</span>
+        <div className="flex text-sm mr-4  lg:text-lg">
+          <span className="mr-5 mt-3">
             {indexOfFirstitem + 1}-
             {Math.min(indexOfLastitem, filteredData.length)} of{" "}
             {filteredData.length}
           </span>
           <span
-            className="text-3xl text-blue-400 cursor-pointer"
+            className="text-4xl text-[#4ba3c3] cursor-pointer mr-[-6px]"
             onClick={handlePreviousPage}
           >
-            <FaArrowAltCircleLeft />
+            <IoIosArrowDropleftCircle className="text-[50px]"/>
           </span>
           <span
-            className="text-3xl text-blue-400 cursor-pointer"
+            className="text-4xl text-[#4ba3c3] cursor-pointer mr-4"
             onClick={handleNextPage}
           >
-            <FaArrowAltCircleRight />
+            <IoIosArrowDroprightCircle className="text-[50px] "/>
           </span>
         </div>
       </div>
