@@ -49,7 +49,7 @@ export const Login = () => {
     try {
       await validationSchema.validate(user, { abortEarly: false });
       setErrors({});
-      const response = await dispatch(handlelogin(user));
+      const response =  dispatch(handlelogin(user));
       if (response && response.success) {
         handleSuccess("Logged In");
         setTimeout(() => {
