@@ -51,15 +51,16 @@ const Addwords = () => {
   }
   const [showDeleted, setShowDeleteWord] = useState(false);
   const [errorDelete, setErrorDelete] = useState(false);
-  const [Rlanguage, setRlanguage] = useState("");
-
+  const [delWord,setdelWord] = useState('')
+  const [wordfocus,setwordfocus] = useState(false)
+  const [showDeleteError,setshowDeleteError] = useState(false)
   const handleDelete = async () => {
     try {
       const resp = await axios.post(
         "http://localhost:3000/words/deleteWord",
         {
           language,
-          word: inputValue,
+          word: delWord,
         },
         {
           headers: {
@@ -71,10 +72,11 @@ const Addwords = () => {
       console.log("Word deleted successfully:", resp.data);
       if (resp.status === 200) {
         setShowDeleteWord(true);
+        setshowDeleteError(false)
       }
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        setErrorDelete(true);
+      if (error.response && error.response.status === 404) {
+        setshowDeleteError(true);
         setShowDeleteWord(false);
       } else {
         console.error("Error deleting word!:", error);
@@ -108,21 +110,25 @@ const Addwords = () => {
     }
   };
 
-  {/*Delete hhomonym*/}
+  {/*Delete homonym*/}
+  const [delHomoWord,setdelHomoWord] = useState('')
+  const [delHomo,setdelHomo] = useState('')
   const [homoDelete,setHomoDelete] = useState(false)
-  const handleDeleteHomonym = () => {
+  const [showHomoDel,setshowHomoDel] =  useState(false)
+  const handleDeleteHomonym =async () => {
     try {
-      const res = axios.post("http://localhost:3000/words/deletehomonym", {
-        word:inputValueWord,
-        homonym:inputValueHomonym,
+      const res =await axios.post("http://localhost:3000/words/deletehomonym", {
+        word:delHomoWord,
+        homonym:delHomo,
       });
-      console.log(res.status);
-      if(res.status === 201){
+      if(res.status === 200){
         setHomoDelete(true)
       }
+      
     } catch (error) {
-        if (error.response && error.response.status === 400) {
+        if (error.response && error.response.status === 404) {
             setHomoDelete(false);
+            setshowHomoDel(true)
             
           } else {
             console.error("Error adding homonym:", error);
@@ -144,6 +150,11 @@ const Addwords = () => {
     setShowHomonymStatus(false);
     setInputValueHomonym("");
     setHomoDelete(false)
+    setdelHomo('')
+    setshowHomoDel(false)
+    setdelHomoWord('')
+    setdelWord('')
+    setshowDeleteError(false)
   };
 
   const handleButtonClick = (section) => {
@@ -165,7 +176,7 @@ const Addwords = () => {
             className={`bg-[#4ba3c3] p-2 w-[200px] mt-6 text-white rounded-md shadow-xl ${
               activeSection === "addWord"
                 ? "bg-[#4ba3c3] text-[#fff] border-2 border-[#4ba3c3]"
-                : "bg-[#fff] text-[#7b6e6e] border-[1px] border-black"
+                : "bg-[#fff] text-[#000] border-[1px] border-black"
             }`}
             onClick={() => handleButtonClick("addWord")}
           >
@@ -176,7 +187,7 @@ const Addwords = () => {
             className={`bg-[#4ba3c3] p-2 w-[200px] mt-6 text-white rounded-md shadow-xl ${
               activeSection === "removeWord"
                 ? "bg-[#4ba3c3] text-[#fff] border-2 border-[#4ba3c3]"
-                : "bg-[#fff] text-[#7b6e6e] border-[1px] border-black"
+                : "bg-[#fff] text-[#000] border-[1px] border-black"
             }`}
             onClick={() => handleButtonClick("removeWord")}
           >
@@ -187,7 +198,7 @@ const Addwords = () => {
             className={`bg-[#4ba3c3] p-2 w-[200px] mt-6 text-white rounded-md shadow-xl ${
               activeSection === "addHomo"
                 ? "bg-[#4ba3c3] text-[#fff] border-2 border-[#4ba3c3]"
-                : "bg-[#fff] text-[#7b6e6e] border-[1px] border-black"
+                : "bg-[#fff] text-[#000] border-[1px] border-black"
             }`}
             onClick={() => handleButtonClick("addHomo")}
           >
@@ -198,7 +209,7 @@ const Addwords = () => {
             className={`bg-[#4ba3c3] p-2 w-[200px] mt-6 text-white rounded-md shadow-xl ${
               activeSection === "removeHomo"
                 ? "bg-[#4ba3c3] text-[#fff] border-2 border-[#4ba3c3]"
-                : "bg-[#fff] text-[#7b6e6e] border-[1px] border-black"
+                : "bg-[#fff] text-[#000] border-[1px] border-black"
             }`}
             onClick={() => handleButtonClick("removeHomo")}
           >
@@ -369,76 +380,78 @@ const Addwords = () => {
 
         {/* Remove Word Section */}
         {activeSection === "removeWord" && (
-          <>
-            <div className="grid gap-2 mt-10">
-              <select
-                value={language}
-                onChange={handleLangSelect}
-                name=""
-                id=""
-                className="w-[70vw] border-[1px] mx-auto mb-7 border-black rounded-md bg-white"
-              >
-                <option value="English">English</option>
-                <option value="German">German</option>
-                <option value="Japanese">Japanese</option>
-                <option value="Italian">Italian</option>
-                <option value="Russian">Russian</option>
-                <option value="Hindi">Hindi</option>
-              </select>
-              <div className="relative">
-                {/* Label */}
-                <label
-                  className={`absolute left-3 transition-all duration-200 
-          ${
-            isFocused || inputValue
-              ? "top-[-20px] text-black text-sm"
-              : "top-0 text-gray-500"
-          }`}
-                >
-                  Word
-                </label>
+  <>
+    <div className="grid gap-2 mt-10">
+      {/* Language Selector */}
+      <select
+        value={language}
+        onChange={handleLangSelect}
+        className="w-[70vw] border-[1px] mx-auto mb-7 border-black rounded-md bg-white"
+      >
+        <option value="English">English</option>
+        <option value="German">German</option>
+        <option value="Japanese">Japanese</option>
+        <option value="Italian">Italian</option>
+        <option value="Russian">Russian</option>
+        <option value="Hindi">Hindi</option>
+      </select>
 
-                {/* Input */}
-                <input
-                  type="text"
-                  value={inputValue}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
-                />
-              </div>
-              {showDeleted && (
-                <>
-                  <div className="text-green-500 font-light">
-                    Deleted word successfully
-                  </div>
-                </>
-              )}
-              {showError && (
-                <>
-                  <div className="text-red-400 font-light mt-2">
-                    Error in deleting word!
-                  </div>
-                </>
-              )}
-              <div className="mt-5 flex gap-5 ">
-                <button
-                  onClick={handleDelete}
-                  className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
-                >
-                  Delete Word
-                </button>
-                <button
-                  onClick={handleCancel}
-                  className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </>
-        )}
+      {/* Word Input */}
+      <div className="relative">
+        {/* Label */}
+        <label
+          className={`absolute left-3 transition-all duration-200 
+            ${
+              wordfocus || delWord
+                ? "top-[-20px] text-black text-sm"
+                : "top-0 text-gray-500"
+            }`}
+        >
+          Word
+        </label>
+
+        {/* Input */}
+        <input
+          type="text"
+          value={delWord}
+          onFocus={() => setwordfocus(true)}
+          onBlur={() => setwordfocus(false)}
+          onChange={(e) => setdelWord(e.target.value)}
+          className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
+        />
+      </div>
+
+      {/* Success/Error Messages */}
+      {showDeleted && (
+        <div className="text-green-500 font-light">
+          Deleted word successfully 
+        </div>
+      )}
+      {showDeleteError && (
+        <div className="text-red-400 font-light mt-2">
+          Word not found!
+        </div>
+      )}
+
+      {/* Buttons */}
+      <div className="mt-5 flex gap-5 ">
+        <button
+          onClick={handleDelete}
+          className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
+        >
+          Delete Word
+        </button>
+        <button
+          onClick={handleCancel}
+          className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </>
+)}
+
 
         {/* Add Homonym Section */}
         {activeSection === "addHomo" && (
@@ -518,72 +531,79 @@ const Addwords = () => {
         )}
 
         {/* Remove Homonym Section */}
-        {activeSection === "removeHomo" && (
-          <div className="grid gap-6 mt-10">
-            {/* Word Input */}
-            <div className="relative">
-              <label
-                className={`absolute left-3 transition-all duration-300 
-        ${
-          isFocusedWord || inputValueWord
-            ? "top-[-20px] text-black text-sm"
-            : "top-0 text-gray-500"
-        }`}
-              >
-                Word
-              </label>
-              <input
-                type="text"
-                value={inputValueWord}
-                onFocus={() => setIsFocusedWord(true)}
-                onBlur={() => setIsFocusedWord(false)}
-                onChange={(e) => setInputValueWord(e.target.value)}
-                className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
-              />
-            </div>
+{activeSection === "removeHomo" && (
+  <div className="grid gap-6 mt-10">
+    {/* Word Input */}
+    <div className="relative">
+      <label
+        className={`absolute left-3 transition-all duration-300 
+          ${
+            isFocusedWord || delHomoWord
+              ? "top-[-20px] text-black text-sm"
+              : "top-0 text-gray-500"
+          }`}
+      >
+        Word
+      </label>
+      <input
+        type="text"
+        value={delHomoWord}
+        onFocus={() => setIsFocusedWord(true)}
+        onBlur={() => setIsFocusedWord(false)}
+        onChange={(e) => setdelHomoWord(e.target.value)}
+        className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
+      />
+    </div>
 
-            {/* Homonym Input */}
-            <div className="relative">
-              <label
-                className={`absolute left-3 transition-all duration-300
-        ${
-          isFocusedHomonym || inputValueHomonym
-            ? "top-[-20px] text-black text-sm"
-            : "top-0 text-gray-500"
-        }`}
-              >
-                Homonym
-              </label>
-              <input
-                type="text"
-                value={inputValueHomonym}
-                onFocus={() => setIsFocusedHomonym(true)}
-                onBlur={() => setIsFocusedHomonym(false)}
-                onChange={(e) => setInputValueHomonym(e.target.value)}
-                className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
-              />
-            </div>
-            {homoDelete && <>
-            <div className="text-red-500 text-sm ">
-                Word and homonyn deleted successfully!
-            </div>
-            </>}
-            <div className="mt-5 flex gap-5">
-              <button
-                onClick={handleDeleteHomonym}
-                className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
-              >
-                Delete Homonym
-              </button>
-              <button
-                onClick={handleCancel}
-                className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
+    {/* Homonym Input */}
+    <div className="relative">
+      <label
+        className={`absolute left-3 transition-all duration-300 
+          ${
+            isFocusedHomonym || delHomo
+              ? "top-[-20px] text-black text-sm"
+              : "top-0 text-gray-500"
+          }`}
+      >
+        Homonym
+      </label>
+      <input
+        type="text"
+        value={delHomo}
+        onFocus={() => setIsFocusedHomonym(true)}
+        onBlur={() => setIsFocusedHomonym(false)}
+        onChange={(e) => setdelHomo(e.target.value)}
+        className="w-[70vw] rounded-md mx-auto pl-4 border-[1px] border-black h-7"
+      />
+    </div>
+
+    {homoDelete && (
+      <div className="text-red-500 text-sm">
+        Word and homonym deleted successfully!
+      </div>
+    )}
+    {showHomoDel && (
+      <div className="text-purple-500 text-sm">
+        Word and homonym not found!
+      </div>
+    )}
+
+    <div className="mt-5 flex gap-5">
+      <button
+        onClick={handleDeleteHomonym}
+        className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
+      >
+        Delete Homonym
+      </button>
+      <button
+        onClick={handleCancel}
+        className="bg-[#4ba3c3] mb-5 text-white rounded-md p-1"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );

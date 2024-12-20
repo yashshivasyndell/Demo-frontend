@@ -26,16 +26,19 @@ const AdminPanel = () => {
   const [applyFilter, setApplyFilter] = useState(false);
   const indexOfLastitem = currentPage * rowsperpage;
   const indexOfFirstitem = indexOfLastitem - rowsperpage;
-
+  const [platform,setPlatform] = useState('')
   // Handle Apply Filter Button
   const handleApplyFilter = () => {
     setFilteredByDate(true);
     setApplyFilter(true)
     setCurrentPage(1);
+    setresetBtn(false)
   };
 
+  const [resetBtn,setresetBtn] = useState(false)
   // Handle Reset Filters
   const handleResetFilters = () => {
+    setresetBtn(false)
     setSearchTerm("");
     setSelectedGender("");
     setSelectedEducation("");
@@ -65,6 +68,10 @@ const AdminPanel = () => {
     const matchesCountry = selectedCountry
       ? item.country === selectedCountry
       : true;
+
+    const matchesPlatform = platform
+    ? item.platform === platform :
+    true
   
     // Calculate the current custom date range
     const itemDate = new Date(item.created); 
@@ -101,7 +108,8 @@ const AdminPanel = () => {
       matchesEducation &&
       matchesCountry &&
       matchesDate &&
-      matchesCustomDate
+      matchesCustomDate && 
+      matchesPlatform
     );
   });
   
@@ -109,12 +117,14 @@ const AdminPanel = () => {
       const currentItem = filteredData.slice(indexOfFirstitem, indexOfLastitem);
       
       const handleNextPage = () => {
+        setresetBtn(false)
         if (currentPage < Math.ceil(filteredData.length / rowsperpage)) {
           setCurrentPage((prev) => prev + 1);
         }
       };
       
       const handlePreviousPage = () => {
+        setresetBtn(false)
         if (currentPage > 1) {
           setCurrentPage((prev) => prev - 1);
         }
@@ -124,10 +134,12 @@ const AdminPanel = () => {
     const query = event.target.value.trim().toLowerCase();
     setSearchTerm(query);
     setCurrentPage(1);
+    setresetBtn(true)
   };
 
   const handleCustom =(e)=>{
     setCustomFilter(e.target.value);
+    setresetBtn(true)
   }
   useEffect(() => {
     dispatch(handleUserData());
@@ -158,6 +170,37 @@ const getMonthRange = (date) => {
   const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
   return `${formatDate(startOfMonth)} - ${formatDate(endOfMonth)}`;
 };
+// date picker 
+const handlestartDatepicker = (date)=>{
+  setStartDate(date)
+  setresetBtn(true)
+}
+const handleendDatepicker = (date)=>{
+  setEndDate(date)
+  setresetBtn(true)
+}
+
+//Gender selector
+const handleGenderSelection = (e)=>{
+  setSelectedGender(e.target.value)
+  setresetBtn(true)
+}
+//Education handler
+const handleEduSelection = (e)=>{
+  setSelectedEducation(e.target.value)
+  setresetBtn(true)
+}
+//country
+const handleCountrySelection = (e)=>{
+  setSelectedCountry(e.target.value)
+  setresetBtn(true)
+}
+//platoform
+
+const handlePlatform = (e)=>{
+  setPlatform(e.target.value)
+  setresetBtn(true)
+}
 
 // Handle left and right arrow clicks
 const handleArrowClick = (direction) => {
@@ -533,9 +576,10 @@ const handleArrowClick = (direction) => {
               dateFormat={"dd-MM-yy"}
               maxDate={endDate ? new Date(endDate) : null}
               selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={handlestartDatepicker}
               className="rounded-lg h-[43px] w-[230px] text-center border-[1px] border-black"
               placeholderText={startDate}
+              
             />
             </div>
           </div>
@@ -547,9 +591,9 @@ const handleArrowClick = (direction) => {
               dateFormat={"dd-MM-yy"}
               maxDate={startDate ? new Date(startDate) : null}
               selected={endDate}
-              onChange={(date) => setEndDate(date)}
+              onChange={handleendDatepicker}
               className="rounded-lg h-[43px] w-[230px] text-black text-center border-[1px] border-black"
-              placeholderText={startDate}
+              
             />
             </div>
           </div></>)}
@@ -561,7 +605,6 @@ const handleArrowClick = (direction) => {
           >
             Apply Date Filter
           </button>
-          {/* Reset Button */}
           
         </div>
         {/* Other Filters */}
@@ -583,7 +626,7 @@ const handleArrowClick = (direction) => {
             name="gender"
             className="w-[80vw] lg:w-[160px] rounded-md h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedGender}
-            onChange={(e) => setSelectedGender(e.target.value)}
+            onChange={handleGenderSelection}
           >
             <option value="">Gender</option>
             <option value="male">Male</option>
@@ -596,7 +639,7 @@ const handleArrowClick = (direction) => {
             name="education"
             className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedEducation}
-            onChange={(e) => setSelectedEducation(e.target.value)}
+            onChange={handleEduSelection}
           >
             <option value="">Education</option>
             {educationList &&
@@ -609,7 +652,7 @@ const handleArrowClick = (direction) => {
             name="country"
             className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
             value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
+            onChange={handleCountrySelection}
           >
             <option value="">Country</option>
             {allContries &&
@@ -625,22 +668,23 @@ const handleArrowClick = (direction) => {
           <select
             name="country"
             className="w-[80vw] lg:w-[160px] rounded-lg h-[45px] text-center outline-none border-[1px] border-black"
-            value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
+            value={platform}
+            onChange={handlePlatform}
           >
             <option value="">Platform</option>
-            {allContries &&
-              allContries.map((countries) => {
-                return (
-                  <option key={countries.code} value={countries.code}>
-                    {countries.name}
-                  </option>
-                );
-              })}
+            <option value="Web">Web</option>
+            <option value="Android">Android</option>
+            <option value="IOS">IOS</option>
+            
           </select>
         </div>
       </div>
 
+           {/* Reset Button */}
+          {resetBtn && <>
+          <div className="w-full mt-4 text-center lg:text-right">
+          <button onClick={handleResetFilters} className="bg-[#175676] text-white p-2 w-[200px] mr-[40px] rounded-lg">Reset</button>
+          </div></>}
       {/*pagination*/}
       <div className="flex justify-between mt-8 mb-8">
         <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">Users:{filteredData.length}</span>
