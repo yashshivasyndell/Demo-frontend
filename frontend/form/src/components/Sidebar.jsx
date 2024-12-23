@@ -43,10 +43,11 @@ function Sidebar() {
   const drawerContent = (
     <Box
       sx={{
-        width: 250,
+        width:249,
         backgroundColor: "#4ba3c3",
         height: "100vh",
         color: "white",
+        overflowY:"hidden"
       }}
     >
       <div className="bg-[#4ba3c3] h-[120px] flex items-center justify-center">
@@ -60,12 +61,12 @@ function Sidebar() {
           color:selectedRoute==='/dashboard'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}} 
+          },margin:"0 7px 0 0px",borderRadius:"10px"}}
           onClick={() => handleNavigation("/dashboard")}>
-          <ListItemIcon sx={{color:selectedRoute==='/dashboard'?'black':"white"}}>
-            <HomeOutlinedIcon />
+          <ListItemIcon sx={{color:selectedRoute==='/dashboard'?'black':"white",minWidth:"0px" }}>
+            <HomeOutlinedIcon sx={{fontSize:"30px"}}/>
           </ListItemIcon>
-          <ListItemText primary={"Dashboard"} />
+          <ListItemText sx={{marginLeft:"10px"}} primary={"Dashboard"}/>
         </ListItemButton>
 
         <ListItemButton
@@ -73,37 +74,37 @@ function Sidebar() {
           color:selectedRoute==='/home'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}}
+          },margin:"0 7px 0 5px",borderRadius:"10px"}}
         onClick={() => handleNavigation("/home")}>
-          <ListItemIcon sx={{color:selectedRoute==='/home'?'black':"white"}}>
+          <ListItemIcon sx={{color:selectedRoute==='/home'?'black':"white",minWidth:"5px" }}>
             <SiSimpleanalytics />
           </ListItemIcon>
-          <ListItemText primary={"Analytics"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Analytics"} />
         </ListItemButton>
 
-        
+         
         <ListItemButton sx={{backgroundColor:selectedRoute === '/adminpanel'?'white':'transparent',
           color:selectedRoute==='/adminpanel'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}}
+          },margin:"0 7px 0 5px",borderRadius:"10px"}}
            onClick={() => handleNavigation("/adminpanel")}>
-          <ListItemIcon sx={{color:selectedRoute==='/adminpanel'?'black':"white"}}>
+          <ListItemIcon sx={{color:selectedRoute==='/adminpanel'?'black':"white",minWidth:"5px" }}>
             <CiUser />
           </ListItemIcon>
-          <ListItemText primary={"Users"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Users"} />
         </ListItemButton>
 
         <ListItemButton sx={{backgroundColor:selectedRoute === '/profile'?'white':'transparent',
           color:selectedRoute==='/profile'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}}
+          },margin:"0 7px 0 5px",borderRadius:"10px"}}
            onClick={() => handleNavigation("/profile")}>
-          <ListItemIcon sx={{color:selectedRoute==='/profile'?'black':"white"}}>
+          <ListItemIcon sx={{color:selectedRoute==='/profile'?'black':"white",minWidth:"5px" }}>
             <LuPencil />
           </ListItemIcon>
-          <ListItemText primary={"Profile"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Profile"} />
         </ListItemButton>
 
 
@@ -111,33 +112,33 @@ function Sidebar() {
           color:selectedRoute==='/addword'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}} onClick={() => handleNavigation("/addword")}>
-          <ListItemIcon sx={{color:selectedRoute==='/addword'?'black':"white"}}>
+          },margin:"0 7px 0 5px",borderRadius:"10px"}} onClick={() => handleNavigation("/addword")}>
+          <ListItemIcon sx={{color:selectedRoute==='/addword'?'black':"white",minWidth:"5px" }}>
             <MdOutlineSpeakerNotes />
           </ListItemIcon>
-          <ListItemText primary={"Add Words"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Add Words"} />
         </ListItemButton>
 
         <ListItemButton sx={{backgroundColor:selectedRoute === '/game'?'white':'transparent',
           color:selectedRoute==='/game'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}} onClick={() => handleNavigation("/game")}>
-          <ListItemIcon sx={{color:selectedRoute==='/game'?'black':"white"}}>
+          },margin:"0 7px 0 5px",borderRadius:"10px"}} onClick={() => handleNavigation("/game")}>
+          <ListItemIcon sx={{color:selectedRoute==='/game'?'black':"white",minWidth:"5px" }}>
             <IoGameControllerOutline />
           </ListItemIcon>
-          <ListItemText primary={"Games"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Games"} />
         </ListItemButton>
 
         <ListItemButton sx={{backgroundColor:selectedRoute === '/custom'?'white':'transparent',
           color:selectedRoute==='/custom'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 7px",borderRadius:"10px"}} onClick={() => handleNavigation("/custom")}>
-          <ListItemIcon sx={{color:selectedRoute==='/custom'?'black':"white"}}>
+          },margin:"0 7px 0 5px",borderRadius:"10px"}} onClick={() => handleNavigation("/custom")}>
+          <ListItemIcon sx={{color:selectedRoute==='/custom'?'black':"white",minWidth:"5px" }}>
             <TfiLightBulb />
           </ListItemIcon>
-          <ListItemText primary={"Custom AI"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Custom AI"} />
         </ListItemButton>
       </List>
 

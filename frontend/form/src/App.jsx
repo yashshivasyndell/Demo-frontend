@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import './App.css';
 import { Form } from './components/Form';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/store/action';
-import  Dashboard  from './components/Dashboard';
 import { Layout } from './components/Layout';
 import Sidebar from './components/Sidebar';
 import { ToastContainer } from 'react-toastify';
-import Usertable from './components/Usertable';
+import Loader from './components/Loader';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,17 +23,19 @@ console.log(isAuthenticated)
       navigate('/dashboard')
     }
   }, [dispatch]);
-    
+
+  
+  
   return (
-    <>
+    <div className='h-screen overflow-y-auto'>
     <ToastContainer />
-       {isAuthenticated ? <Routes> <Route path='*' element={<Layout/>}/> </Routes> : 
+       {isAuthenticated ? <Routes> <Route path='*' element={<Layout/>}/></Routes> : 
        <Routes>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Form/>}/>
       </Routes>
        }
-    </>
+    </div>
   );
 }
 

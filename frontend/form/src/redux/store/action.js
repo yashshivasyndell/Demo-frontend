@@ -12,10 +12,10 @@ export const handlelogin = (loginCred) => async (dispatch) => {
         loginCred,
         jsonconfig
       );
-      console.log(data);
       setTimeout(()=>{
         dispatch({ type: "LOGIN_SUCCESS", payload: data });
         dispatch(loadUser());
+        
       },500)
       return data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const handlelogin = (loginCred) => async (dispatch) => {
         },
         withCredentials: true,
       });
-      console.log('Logout response',logout);
+      
       
     }catch(error){
       console.log("logout failed",error);
@@ -49,9 +49,8 @@ export const handlelogin = (loginCred) => async (dispatch) => {
   }
   export const loadUser = () => async (dispatch) => {
     try {
-      console.log("object");
       dispatch({ type: "LOAD_REQ" });
-      
+      console.log("load req dispacth");
       const { data } = await axios.get('http://localhost:3000/auth/loadUser', jsonconfig);
       dispatch({ type: "LOAD_SUCCESS", payload: data });
     } catch (error) {
@@ -64,13 +63,12 @@ export const handlelogin = (loginCred) => async (dispatch) => {
   export const handleUserData =()=>async (dispatch)=>{
       try{
       dispatch({type:"ALL_USER_LOADING"})
+      console.log("users loading");
       const {data} = await axios.get('http://localhost:3000/users/dataset',jsonconfig)
-
-      console.log(data.data.map((e) => {
-        return new Date(e.created).toLocaleDateString("en-US");
-      }));
-      
-      dispatch({type:"ALL_USER_SUCCESS",payload:data})
+      console.log("users loading success");
+      setTimeout(()=>{
+        dispatch({type:"ALL_USER_SUCCESS",payload:data})
+      },1000)
     }catch(error){
       dispatch({type:"ALL_USER_ERROR",payload:error})
       console.log("error: ",error);

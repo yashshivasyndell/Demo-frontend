@@ -147,8 +147,16 @@ export const Form = () => {
           },
         }
       );
-
       console.log("User created:", response.data);
+       console.log("This is user.emial ",user.email);
+      const email = await axios.post("http://localhost:3000/auth/sender", {
+        email: user.email,
+      },{
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+         console.log("this is email ",email);
       handleSuccess("user Registered!");
       setTimeout(() => {
         navigate("/login");

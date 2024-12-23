@@ -1,4 +1,4 @@
-import { createReducer, createSlice } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuthenticated: false,
@@ -14,6 +14,7 @@ const userReducer = createReducer(initialState, (builder) => {
     state.loading = true;
   });
   builder.addCase("LOAD_SUCCESS", (state, action) => {
+    state.loading = false
     state.user = action.payload.userData;
     state.isAuthenticated = true;
   });

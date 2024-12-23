@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleUserData } from "../redux/store/action";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
+import Loader from "./Loader";
 
 const AdminPanel = () => {
   const { user, loading, error } = useSelector((state) => state.getData);
@@ -26,19 +27,19 @@ const AdminPanel = () => {
   const [applyFilter, setApplyFilter] = useState(false);
   const indexOfLastitem = currentPage * rowsperpage;
   const indexOfFirstitem = indexOfLastitem - rowsperpage;
-  const [platform,setPlatform] = useState('')
+  const [platform, setPlatform] = useState("");
   // Handle Apply Filter Button
   const handleApplyFilter = () => {
     setFilteredByDate(true);
-    setApplyFilter(true)
+    setApplyFilter(true);
     setCurrentPage(1);
-    setresetBtn(false)
+    setresetBtn(false);
   };
 
-  const [resetBtn,setresetBtn] = useState(false)
+  const [resetBtn, setresetBtn] = useState(false);
   // Handle Reset Filters
   const handleResetFilters = () => {
-    setresetBtn(false)
+    setresetBtn(false);
     setSearchTerm("");
     setSelectedGender("");
     setSelectedEducation("");
@@ -46,8 +47,8 @@ const AdminPanel = () => {
     setStartDate(null);
     setEndDate(null);
     setFilteredByDate(false);
-    setApplyFilter(false)
-    setCustomFilter(false)
+    setApplyFilter(false);
+    setCustomFilter(false);
   };
 
   // Filter the data based on the search and selected filters
@@ -56,27 +57,25 @@ const AdminPanel = () => {
     const matchesSearchTerm =
       item.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.email.toLowerCase().includes(searchTerm.toLowerCase());
-  
+
     const matchesGender = selectedGender
       ? item.gender === selectedGender
       : true;
-  
+
     const matchesEducation = selectedEducation
       ? item.education === selectedEducation
       : true;
-  
+
     const matchesCountry = selectedCountry
       ? item.country === selectedCountry
       : true;
 
-    const matchesPlatform = platform
-    ? item.platform === platform :
-    true
-  
+    const matchesPlatform = platform ? item.platform === platform : true;
+
     // Calculate the current custom date range
-    const itemDate = new Date(item.created); 
+    const itemDate = new Date(item.created);
     let matchesCustomDate = true;
-  
+
     if (customFilter === "day") {
       matchesCustomDate =
         itemDate.toDateString() === currentDate.toDateString(); // Same day comparison
@@ -85,22 +84,28 @@ const AdminPanel = () => {
       startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
       const endOfWeek = new Date(startOfWeek);
       endOfWeek.setDate(startOfWeek.getDate() + 6);
-      matchesCustomDate =
-        itemDate >= startOfWeek && itemDate <= endOfWeek; // Date falls within the current week
+      matchesCustomDate = itemDate >= startOfWeek && itemDate <= endOfWeek; // Date falls within the current week
     } else if (customFilter === "Month") {
-      const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      matchesCustomDate =
-        itemDate >= startOfMonth && itemDate <= endOfMonth; // Date falls within the current month
+      const startOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+      );
+      const endOfMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+      );
+      matchesCustomDate = itemDate >= startOfMonth && itemDate <= endOfMonth; // Date falls within the current month
     }
-  
+
     // Date picker logic (Start and End Date)
     const matchesDate =
       !filteredByDate ||
       (startDate && endDate
         ? itemDate >= new Date(startDate) && itemDate <= new Date(endDate)
         : true);
-  
+
     // Combine all filters
     return (
       matchesSearchTerm &&
@@ -108,112 +113,111 @@ const AdminPanel = () => {
       matchesEducation &&
       matchesCountry &&
       matchesDate &&
-      matchesCustomDate && 
+      matchesCustomDate &&
       matchesPlatform
     );
   });
-  
-      
-      const currentItem = filteredData.slice(indexOfFirstitem, indexOfLastitem);
-      
-      const handleNextPage = () => {
-        setresetBtn(false)
-        if (currentPage < Math.ceil(filteredData.length / rowsperpage)) {
-          setCurrentPage((prev) => prev + 1);
-        }
-      };
-      
-      const handlePreviousPage = () => {
-        setresetBtn(false)
-        if (currentPage > 1) {
-          setCurrentPage((prev) => prev - 1);
-        }
-      };
 
-    const handleSearch = (event) => {
+  const currentItem = filteredData.slice(indexOfFirstitem, indexOfLastitem);
+
+  const handleNextPage = () => {
+    setresetBtn(false);
+    if (currentPage < Math.ceil(filteredData.length / rowsperpage)) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    setresetBtn(false);
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleSearch = (event) => {
     const query = event.target.value.trim().toLowerCase();
     setSearchTerm(query);
     setCurrentPage(1);
-    setresetBtn(true)
+    setresetBtn(true);
   };
 
-  const handleCustom =(e)=>{
+  const handleCustom = (e) => {
     setCustomFilter(e.target.value);
-    setresetBtn(true)
-  }
+    setresetBtn(true);
+  };
   useEffect(() => {
     dispatch(handleUserData());
   }, [dispatch]);
 
   // Format date to "Tuesday, 17 Dec 2024"
-const formatDate = (date) => {
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-};
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  };
 
-// Get the Week range
-const getWeekRange = (date) => {
-  const startOfWeek = new Date(date);
-  startOfWeek.setDate(date.getDate() - date.getDay()); 
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6); 
-  return `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`;
-};
+  // Get the Week range
+  const getWeekRange = (date) => {
+    const startOfWeek = new Date(date);
+    startOfWeek.setDate(date.getDate() - date.getDay());
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    return `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`;
+  };
 
-// Get the Month range
-const getMonthRange = (date) => {
-  const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-  const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  return `${formatDate(startOfMonth)} - ${formatDate(endOfMonth)}`;
-};
-// date picker 
-const handlestartDatepicker = (date)=>{
-  setStartDate(date)
-  setresetBtn(true)
-}
-const handleendDatepicker = (date)=>{
-  setEndDate(date)
-  setresetBtn(true)
-}
+  // Get the Month range
+  const getMonthRange = (date) => {
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return `${formatDate(startOfMonth)} - ${formatDate(endOfMonth)}`;
+  };
+  // date picker
+  const handlestartDatepicker = (date) => {
+    setStartDate(date);
+    setresetBtn(true);
+  };
+  const handleendDatepicker = (date) => {
+    setEndDate(date);
+    setresetBtn(true);
+  };
 
-//Gender selector
-const handleGenderSelection = (e)=>{
-  setSelectedGender(e.target.value)
-  setresetBtn(true)
-}
-//Education handler
-const handleEduSelection = (e)=>{
-  setSelectedEducation(e.target.value)
-  setresetBtn(true)
-}
-//country
-const handleCountrySelection = (e)=>{
-  setSelectedCountry(e.target.value)
-  setresetBtn(true)
-}
-//platoform
+  //Gender selector
+  const handleGenderSelection = (e) => {
+    setSelectedGender(e.target.value);
+    setresetBtn(true);
+  };
+  //Education handler
+  const handleEduSelection = (e) => {
+    setSelectedEducation(e.target.value);
+    setresetBtn(true);
+  };
+  //country
+  const handleCountrySelection = (e) => {
+    setSelectedCountry(e.target.value);
+    setresetBtn(true);
+  };
+  //platoform
 
-const handlePlatform = (e)=>{
-  setPlatform(e.target.value)
-  setresetBtn(true)
-}
+  const handlePlatform = (e) => {
+    setPlatform(e.target.value);
+    setresetBtn(true);
+  };
 
-// Handle left and right arrow clicks
-const handleArrowClick = (direction) => {
-  const newDate = new Date(currentDate);
-  if (customFilter === "day") {
-    newDate.setDate(newDate.getDate() + (direction === "left" ? -1 : 1));
-  } else if (customFilter === "Week") {
-    newDate.setDate(newDate.getDate() + (direction === "left" ? -7 : 7));
-  } else if (customFilter === "Month") {
-    newDate.setMonth(newDate.getMonth() + (direction === "left" ? -1 : 1));
-  }
-  setCurrentDate(newDate);
-};
+  // Handle left and right arrow clicks
+  const handleArrowClick = (direction) => {
+    const newDate = new Date(currentDate);
+    if (customFilter === "day") {
+      newDate.setDate(newDate.getDate() + (direction === "left" ? -1 : 1));
+    } else if (customFilter === "Week") {
+      newDate.setDate(newDate.getDate() + (direction === "left" ? -7 : 7));
+    } else if (customFilter === "Month") {
+      newDate.setMonth(newDate.getMonth() + (direction === "left" ? -1 : 1));
+    }
+    setCurrentDate(newDate);
+  };
   //Country array
   const allContries = [
     { name: "Afghanistan", code: "AF" },
@@ -487,6 +491,9 @@ const handleArrowClick = (direction) => {
     (item) => item.isGuest === true
   ).length;
 
+  if (loading) {
+    return <Loader />;
+  }
   //Date variables
   return (
     <div className="overflow-x-none overflow-y-auto h-[100%] bg-[#EDEDED]">
@@ -497,34 +504,34 @@ const handleArrowClick = (direction) => {
         <div className="flex flex-col p-3 w-full lg:flex-row gap-8 justify-center">
           <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
             <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
-            {filteredData.length}
+              {filteredData.length}
             </div>
             <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
-             Total Users
+              Total Users
             </div>
           </div>
           <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
             <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
-            {verifiedUsers}
+              {verifiedUsers}
             </div>
             <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
-             verified Users
+              verified Users
             </div>
           </div>
           <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
             <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
-            {pendingUsers}
+              {pendingUsers}
             </div>
             <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
-             Pending Users
+              Pending Users
             </div>
           </div>
           <div className="relative w-full lg:w-52 h-32 bg-[#175676] text-white flex flex-col justify-center rounded-2xl items-center text-md">
             <div className="absolute top-[30px] left-[30px] text-2xl font-medium mb-5">
-            {pendingUsers}
+              {pendingUsers}
             </div>
             <div className="absolute top-[60px] left-[30px] text-base font-base mb-5">
-             Pending Users
+              Pending Users
             </div>
           </div>
         </div>
@@ -534,69 +541,74 @@ const handleArrowClick = (direction) => {
         <div className="flex flex-col mx-auto lg:flex lg:flex-row gap-3 justify-center">
           {/*Custom*/}
           <select
-        name="customFilter"
-        id="customFilter"
-        onChange={handleCustom}
-        value={customFilter}
-        className="w-[80vw] mx-auto lg:w-[240px] text-center rounded-md h-[45px] border-[1px] border-black"
-      >
-        <option value="">Custom</option>
-        <option value="day">Day</option>
-        <option value="Week">Week</option>
-        <option value="Month">Month</option>
-      </select>
+            name="customFilter"
+            id="customFilter"
+            onChange={handleCustom}
+            value={customFilter}
+            className="w-[80vw] mx-auto lg:w-[240px] text-center rounded-md h-[45px] border-[1px] border-black"
+          >
+            <option value="">Custom</option>
+            <option value="day">Day</option>
+            <option value="Week">Week</option>
+            <option value="Month">Month</option>
+          </select>
           {/*custom input*/}
           {customFilter && (
-        <div className="w-[80vw] border-[1px] border-black text-center bg-white lg:w-[455px] h-[45px] flex items-center justify-between rounded-xl">
-          <span
-            className="text-3xl text-black cursor-pointer"
-            onClick={() => handleArrowClick("left")}
-          >
-            <FaArrowAltCircleLeft className="ml-2"/>
-          </span>
-          <span className="text-gray-700 text-lg">
-            {customFilter === "day" && formatDate(currentDate)}
-            {customFilter === "Week" && getWeekRange(currentDate)}
-            {customFilter === "Month" && getMonthRange(currentDate)}
-          </span>
-          <span
-            className="text-3xl text-black cursor-pointer"
-            onClick={() => handleArrowClick("right")}
-          >
-            <FaArrowAltCircleRight className="mr-2"/>
-          </span>
-        </div>
-      )}
+            <div className="w-[80vw] border-[1px] border-black text-center bg-white lg:w-[455px] h-[45px] flex items-center justify-between rounded-xl">
+              <span
+                className="text-3xl text-black cursor-pointer"
+                onClick={() => handleArrowClick("left")}
+              >
+                <FaArrowAltCircleLeft className="ml-2" />
+              </span>
+              <span className="text-gray-700 text-lg">
+                {customFilter === "day" && formatDate(currentDate)}
+                {customFilter === "Week" && getWeekRange(currentDate)}
+                {customFilter === "Month" && getMonthRange(currentDate)}
+              </span>
+              <span
+                className="text-3xl text-black cursor-pointer"
+                onClick={() => handleArrowClick("right")}
+              >
+                <FaArrowAltCircleRight className="mr-2" />
+              </span>
+            </div>
+          )}
           {/* Date Picker */}
-          {!customFilter&&(
-            <><div className="flex items-center">
-              <div className="relative">
-            <span className="absolute top-[9px] left-9 z-10 font-bold">From: </span>
-            <DatePicker
-              dateFormat={"dd-MM-yy"}
-              maxDate={endDate ? new Date(endDate) : null}
-              selected={startDate}
-              onChange={handlestartDatepicker}
-              className="rounded-lg h-[43px] w-[230px] text-center border-[1px] border-black"
-              placeholderText={startDate}
-              
-            />
-            </div>
-          </div>
+          {!customFilter && (
+            <>
+              <div className="flex items-center">
+                <div className="relative">
+                  <span className="absolute top-[9px] left-9 z-10 font-bold">
+                    From:{" "}
+                  </span>
+                  <DatePicker
+                    dateFormat={"dd-MM-yy"}
+                    maxDate={endDate ? new Date(endDate) : null}
+                    selected={startDate}
+                    onChange={handlestartDatepicker}
+                    className="rounded-lg h-[43px] w-[230px] text-center border-[1px] border-black"
+                    placeholderText={startDate}
+                  />
+                </div>
+              </div>
 
-          <div className="flex items-center">
-          <div className="relative">
-            <span className="absolute top-[9px] left-14 z-10 font-bold">To: </span>
-            <DatePicker
-              dateFormat={"dd-MM-yy"}
-              maxDate={startDate ? new Date(startDate) : null}
-              selected={endDate}
-              onChange={handleendDatepicker}
-              className="rounded-lg h-[43px] w-[230px] text-black text-center border-[1px] border-black"
-              
-            />
-            </div>
-          </div></>)}
+              <div className="flex items-center">
+                <div className="relative">
+                  <span className="absolute top-[9px] left-14 z-10 font-bold">
+                    To:{" "}
+                  </span>
+                  <DatePicker
+                    dateFormat={"dd-MM-yy"}
+                    maxDate={startDate ? new Date(startDate) : null}
+                    selected={endDate}
+                    onChange={handleendDatepicker}
+                    className="rounded-lg h-[43px] w-[230px] text-black text-center border-[1px] border-black"
+                  />
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Apply Filter Button */}
           <button
@@ -605,7 +617,6 @@ const handleArrowClick = (direction) => {
           >
             Apply Date Filter
           </button>
-          
         </div>
         {/* Other Filters */}
         <div className="grid lg:flex gap-1 justify-center mt-4">
@@ -675,19 +686,28 @@ const handleArrowClick = (direction) => {
             <option value="Web">Web</option>
             <option value="Android">Android</option>
             <option value="IOS">IOS</option>
-            
           </select>
         </div>
       </div>
 
-           {/* Reset Button */}
-          {resetBtn && <>
+      {/* Reset Button */}
+      {resetBtn && (
+        <>
           <div className="w-full mt-4 text-center lg:text-right">
-          <button onClick={handleResetFilters} className="bg-[#175676] text-white p-2 w-[200px] mr-[40px] rounded-lg">Reset</button>
-          </div></>}
+            <button
+              onClick={handleResetFilters}
+              className="bg-[#175676] text-white p-2 w-[200px] mr-[40px] rounded-lg"
+            >
+              Reset
+            </button>
+          </div>
+        </>
+      )}
       {/*pagination*/}
       <div className="flex justify-between mt-8 mb-8">
-        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">Users:{filteredData.length}</span>
+        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">
+          Users:{filteredData.length}
+        </span>
         <div className="flex text-sm mr-4  lg:text-lg">
           <span className="mr-5 mt-3">
             {indexOfFirstitem + 1}-
@@ -698,96 +718,119 @@ const handleArrowClick = (direction) => {
             className="text-4xl text-[#4ba3c3] cursor-pointer mr-[-6px]"
             onClick={handlePreviousPage}
           >
-            <IoIosArrowDropleftCircle className="text-[50px]"/>
+            <IoIosArrowDropleftCircle className="text-[50px]" />
           </span>
           <span
             className="text-4xl text-[#4ba3c3] cursor-pointer mr-4"
             onClick={handleNextPage}
           >
-            <IoIosArrowDroprightCircle className="text-[50px] "/>
+            <IoIosArrowDroprightCircle className="text-[50px] " />
           </span>
         </div>
       </div>
       {/* Table of Users */}
-<div className="flex justify-center items-center mt-2 ">
-  <div className="w-[90vw] lg:w-auto mx-auto max-w-screen-xl">
-    <div className="h-auto border border-gray-300 rounded-md">
-      <div className=" max-h-auto">
-        <table className="min-w-[60vw] bg-white border-collapse border-gray-300 shadow-lg">
-          <thead className="bg-white">
-            <tr>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Id
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Username
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Email
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                DOB
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Gender
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Education
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Country
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Role
-              </th>
-              <th className="px-4 py-7 border-b border-white text-left font-normal">
-                Created
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItem.map((item, index) => (
-              <tr key={item.id} className="hover:bg-gray-100">
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {index + 1}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.username}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.email || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.dateofbirth || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.gender || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.education || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.country || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {item.role || "N/A"}
-                </td>
-                <td className="px-2 py-4 border-b text-center border-gray-300">
-                  {new Date(item.created).toLocaleDateString("en-US") || "N/A"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="flex justify-center items-center mt-2">
+        <div className="w-[90vw] lg:w-auto mx-auto max-w-screen-xl">
+          <div className="h-auto border border-gray-300 rounded-md">
+            <div className="max-h-auto overflow-x-auto max-w-[72vw]">
+              <table
+                className={`${
+                  currentItem.length === 0 ? "max-w-[75vw]" : "max-w-[75vw]"
+                } bg-white border-collapse border-gray-300 shadow-lg`}
+              >
+                <thead className="bg-white">
+                  <tr>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Id
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Username
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-center font-normal">
+                      Email
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      DOB
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Gender
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Education
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Country
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Role
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Created
+                    </th>
+                    <th className="px-6 py-7 border-b border-white text-left font-normal">
+                      Game Timer
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItem.length > 0 ? (
+                    currentItem.map((item, index) => (
+                      <tr key={item.id} className="hover:bg-gray-100">
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {index + 1}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.username}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.email || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.dateofbirth || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.gender || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.education || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.country || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.role || "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {new Date(item.created).toLocaleDateString("en-US") ||
+                            "N/A"}
+                        </td>
+                        <td className="px-6 py-4 border-b text-center border-gray-300">
+                          {item.gameTimer ||
+                            "N/A"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="9"
+                        className="px-4 py-10 text-center text-gray-500 text-lg"
+                      >
+                        No data available for the searched query.
+                      </td>
+                    </tr>
+                  )} 
+                </tbody> 
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-
       {/* Pagination */}
       <div className="flex justify-between mt-8 mb-8">
-        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">Users:{filteredData.length}</span>
+        <span className="ml-11 text-sm flex mt-3 font-semibold flex-col lg:text-lg justify-normal">
+          Users:{filteredData.length}
+        </span>
         <div className="flex text-sm mr-4  lg:text-lg">
           <span className="mr-5 mt-3">
             {indexOfFirstitem + 1}-
@@ -798,13 +841,13 @@ const handleArrowClick = (direction) => {
             className="text-4xl text-[#4ba3c3] cursor-pointer mr-[-6px]"
             onClick={handlePreviousPage}
           >
-            <IoIosArrowDropleftCircle className="text-[50px]"/>
+            <IoIosArrowDropleftCircle className="text-[50px]" />
           </span>
           <span
             className="text-4xl text-[#4ba3c3] cursor-pointer mr-4"
             onClick={handleNextPage}
           >
-            <IoIosArrowDroprightCircle className="text-[50px] "/>
+            <IoIosArrowDroprightCircle className="text-[50px] " />
           </span>
         </div>
       </div>
