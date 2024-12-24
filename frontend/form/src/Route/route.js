@@ -1,4 +1,3 @@
-
 import Addwords from '../components/Addwords';
 import AdminPanel from '../components/AdminPanel';
 import Dashboard from '../components/Dashboard';
@@ -6,6 +5,7 @@ import Gallary from '../components/Gallary';
 import Home from '../components/Home';
 import Loader from '../components/Loader';
 import Profile from '../components/Profile';
+import { UserLogin } from '../components/UserLogin';
 import Usertable from '../components/Usertable';
 
 const routes = [
@@ -48,6 +48,11 @@ const routes = [
   {
     path: '/loader',
     component: Loader,
+    authRequired: true,
+  },
+  {
+    path: '/login',
+    component: UserLogin,
     authRequired: true,
   }
   

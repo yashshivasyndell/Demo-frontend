@@ -1,8 +1,0 @@
-<DatePicker
-                selected={dob}
-                onChange={(dob) => setdob(dob)}
-                value={dob.dob}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Select Date"
-                className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none w-full"
-              />

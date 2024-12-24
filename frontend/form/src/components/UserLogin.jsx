@@ -6,9 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 import { IoLockClosed } from "react-icons/io5";
 import { useSelector, useDispatch } from "react-redux";
-import { handlelogin } from "../redux/store/action";
-import { RiAdminFill } from "react-icons/ri";
-export const Login = () => {
+import { handlelogin} from "../redux/store/action";
+export const UserLogin = () => {
 
   const [user, setUser] = useState({
     email: "",
@@ -55,7 +54,7 @@ export const Login = () => {
       if (response && response.success) {
         handleSuccess("Logged In");
         setTimeout(() => {
-          navigate("/adminpanel");
+          navigate("/dashboard");
         }, 1500);
       } else {
         handleError("Oops! Wrong email or password");
@@ -93,7 +92,7 @@ export const Login = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-[#021b79] to-[#0575e6]">
   <div className="bg-[#fff] w-[40%] h-[272.38px] flex flex-col rounded-lg shadow-2xl">
   
-    <h2 className="text-3xl font-semibold text-gray-700 text-center mt-8 relative"><RiAdminFill className="absolute left-[10px] text-sm" /> Admin Login</h2>
+    <h2 className="text-3xl font-semibold text-gray-700 text-center mt-8 relative">Login</h2>
     <form action="" autoComplete="on" className="p-6">
       {/* Email Field */}
       <div className="relative mb-6">
@@ -175,7 +174,7 @@ export const Login = () => {
       </button>
     </div>
   </div>
-  <ToastContainer />
+ 
 </div>
 
   );

@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, useMediaQuery } from "@mui/material";
 import Sidebar from "./Sidebar";
+import UserSidebar from "./UserSidebar"
 import Outlet from "./Outlet";
 import { useSelector } from "react-redux";
 
 export const Layout = () => {
-  const { isAuthenticated, loading, user } = useSelector((state) => state.auth);
 
   const isMobile = useMediaQuery("(max-width:900px)");
 
@@ -18,8 +18,7 @@ export const Layout = () => {
       }}
     >
       {/* Sidebar */}
-      <Sidebar />
-
+     <Sidebar/> 
       {/* Main Content */}
       <Box
         component="main"

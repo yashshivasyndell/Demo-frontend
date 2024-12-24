@@ -4,18 +4,18 @@ const jsonconfig = {
     withCredentials:true
 }
 
+// Admin login
 export const handlelogin = (loginCred) => async (dispatch) => {
     try {
       dispatch({ type: "LOGIN_REQUEST" });
       const {data}  = await axios.post(
-        'http://localhost:3000/auth/login',
+        'http://localhost:3000/auth/adminlogin',
         loginCred,
         jsonconfig
       );
       setTimeout(()=>{
         dispatch({ type: "LOGIN_SUCCESS", payload: data });
         dispatch(loadUser());
-        
       },500)
       return data;
     } catch (error) {
@@ -28,8 +28,9 @@ export const handlelogin = (loginCred) => async (dispatch) => {
     }
   };
 
-  //Logout Redux setup
 
+
+  //Logout Redux setup
   export const handlelogout =()=>
      async (dispatch)=>{
     try{
@@ -40,7 +41,6 @@ export const handlelogin = (loginCred) => async (dispatch) => {
         },
         withCredentials: true,
       });
-      
       
     }catch(error){
       console.log("logout failed",error);
