@@ -8,6 +8,7 @@ import { handleError, handleSuccess } from "../util";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import DatePicker from "react-datepicker";
 
 export const Form = () => {
   const [user, setUser] = useState({
@@ -26,7 +27,7 @@ export const Form = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [dob,setdob] = useState(new Date())
   const [errors, setErrors] = useState({});
   const [isPhoneDisabled, setIsPhoneDisabled] = useState(false);
   const [countries, setCountries] = useState(Country.getAllCountries());
@@ -39,8 +40,14 @@ export const Form = () => {
   };
 
   const validationSchema = yup.object({
-    name: yup.string().required("First name is required"),
-    lastname: yup.string().required("Last name is required"),
+    name: yup
+    .string()
+    .matches(/^[a-zA-Z\s]+$/, "Name can only contain letters")
+    .required("First name is required"),
+    lastname: yup
+    .string()
+    .matches(/^[a-zA-Z\s]+$/, "Last name can only contain letters")
+    .required("Last name is required"),
     email: yup
       .string()
       .email("Enter a valid email")
@@ -87,6 +94,7 @@ export const Form = () => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    
 
     setUser({ ...user, [name]: value });
 
@@ -148,7 +156,7 @@ export const Form = () => {
         }
       );
       console.log("User created:", response.data);
-       console.log("This is user.emial ",user.email);
+       
       const email = await axios.post("http://localhost:3000/auth/sender", {
         email: user.email,
       },{
@@ -164,6 +172,18 @@ export const Form = () => {
     } catch (err) {
       const errorMessages = {};
 
+      if(err.status === 398){
+        handleError('Password must be 8 char long')
+      }
+      if(err.status === 399){
+        handleError('Email must be in valid formate')
+      }
+      if(err.status === 401){
+        handleError('Last name must be at lease 4 char long')
+      }
+      if(err.status === 402){
+           handleError('Enter a valid ph. Formate')
+      }
       if (err.inner && Array.isArray(err.inner)) {
         err.inner.forEach((validationError) => {
           errorMessages[validationError.path] = validationError.message;
@@ -221,7 +241,7 @@ export const Form = () => {
                 Last Name
               </label>
               <input
-                type="text"
+                type="name"
                 name="lastname"
                 className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none"
                 value={user.lastname}
@@ -280,13 +300,13 @@ export const Form = () => {
               <label className="text-left text-sm font-medium ml-1 mb-2 text-white">
                 Date of Birth
               </label>
-              <input
-                type="date"
-                name="dob"
-                className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none"
-                value={user.dob}
-                onChange={handleChange}
-              />
+              <DatePicker
+  selected={user.dob ? new Date(user.dob) : null} // Convert to Date object if `user.dob` is a string
+  onChange={(date) => setUser({ ...user, dob: date })} // Update user state
+  dateFormat="yyyy-MM-dd"
+  placeholderText="Select Date"
+  className="flex-1 p-2 border rounded focus:ring-teal-400 focus:border-teal-400 outline-none w-full"
+/>
               {errors.dob && (
                 <p className="text-red-500 text-left text-xs ">{errors.dob}</p>
               )}
@@ -304,7 +324,7 @@ export const Form = () => {
                 value={user.gender}
                 onChange={handleChange}
               >
-                <option value="">Select Gender</option>
+                <option value="" disabled>Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>

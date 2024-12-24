@@ -55,7 +55,6 @@ function Sidebar() {
           <img className="h-[70px] w-[70px] rounded-full" src={zoundslike} alt="Logo" />
         </div>
       </div>
-
       <List>
         <ListItemButton sx={{backgroundColor:selectedRoute === '/dashboard'?'white':'transparent',
           color:selectedRoute==='/dashboard'?'black':'white',

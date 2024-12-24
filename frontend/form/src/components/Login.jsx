@@ -107,7 +107,7 @@ export const Login = () => {
         }}
           className={`absolute left-9 top-[2px] text-gray-200 pointer-events-none transition-all duration-200 ${
             focusedInput === "email" || user.email
-              ? "top-[-29px] left-[9px] text-sm text-black px-1"
+              ? "top-[-25px] left-[9px] text-sm text-black px-1"
               : "top-2 text-gray-200"
           }`}
         >
@@ -134,7 +134,7 @@ export const Login = () => {
         <label
   className={`absolute left-9 top-[3px] pointer-events-none transition-all duration-200 ${
     focusedInput === "password" || user.password
-      ? "top-[-29px] left-[9px] text-sm text-black px-1"
+      ? "top-[-25px] left-[9px] text-sm text-black px-1"
       : "top-2 text-gray-500"
   }`}
 >
