@@ -4,6 +4,7 @@ import Dashboard from '../components/Dashboard';
 import Gallary from '../components/Gallary';
 import Home from '../components/Home';
 import Loader from '../components/Loader';
+import Notifications from '../components/Notifications';
 import Profile from '../components/Profile';
 import { UserLogin } from '../components/UserLogin';
 import Usertable from '../components/Usertable';
@@ -53,6 +54,11 @@ const routes = [
   {
     path: '/login',
     component: UserLogin,
+    authRequired: true,
+  },
+  {
+    path: '/notifications',
+    component: Notifications,
     authRequired: true,
   }
   

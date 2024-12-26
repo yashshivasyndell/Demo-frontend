@@ -50,12 +50,20 @@ export const UserLogin = () => {
       await validationSchema.validate(user, { abortEarly: false });
       setErrors({});
       const response =await dispatch(handlelogin(user));
-      console.log("this is response ",response)
+      console.log("this is response ",response.role)
+    
       if (response && response.success) {
-        handleSuccess("Logged In");
+        handleSuccess(`Logged in as ${response.role}`);
+        const {role} = response
         setTimeout(() => {
-          navigate("/dashboard");
-        }, 1500);
+          if(role==="admin"){
+            navigate('/adminpanel')
+          }else if(role==='user'){
+            navigate('/user')
+          }else{
+            navigate('/')
+          }
+        }, 1000);
       } else {
         handleError("Oops! Wrong email or password");
       }
@@ -107,7 +115,7 @@ export const UserLogin = () => {
         }}
           className={`absolute left-9 top-[2px] text-gray-200 pointer-events-none transition-all duration-200 ${
             focusedInput === "email" || user.email
-              ? "top-[-25px] left-[9px] text-sm text-black px-1"
+              ? "top-[-29px] left-[9px] text-sm text-black px-1"
               : "top-2 text-gray-200"
           }`}
         >
@@ -134,7 +142,7 @@ export const UserLogin = () => {
         <label
   className={`absolute left-9 top-[3px] pointer-events-none transition-all duration-200 ${
     focusedInput === "password" || user.password
-      ? "top-[-25px] left-[9px] text-sm text-black px-1"
+      ? "top-[-29px] left-[9px] text-sm text-black px-1"
       : "top-2 text-gray-500"
   }`}
 >
@@ -174,7 +182,7 @@ export const UserLogin = () => {
       </button>
     </div>
   </div>
- 
+  <ToastContainer />
 </div>
 
   );

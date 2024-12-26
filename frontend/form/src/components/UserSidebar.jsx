@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { handlelogout } from "../redux/store/action";
-import { useMediaQuery, Drawer, Box, List, Divider, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { useMediaQuery, Drawer, Box, List, Divider, ListItemButton, ListItemIcon, ListItemText, Badge } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -10,6 +10,8 @@ import zoundslike from "../assets/download.png";
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import { LuPencil } from "react-icons/lu";
 import { SiSimpleanalytics } from "react-icons/si";
+import MailIcon from '@mui/icons-material/Mail';
+import { IoIosNotifications } from "react-icons/io";
 
 function UserSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -28,7 +30,7 @@ function UserSidebar() {
 
   const handleLogout = () => {
     dispatch(handlelogout());
-    navigate("/login");
+    navigate("/userlogin");
   };
 
   const handleNavigation = (route) => {
@@ -89,6 +91,22 @@ function UserSidebar() {
             <LuPencil />
           </ListItemIcon>
           <ListItemText sx={{marginLeft:"16px"}} primary={"Profile"} />
+        </ListItemButton>
+
+
+        <ListItemButton sx={{backgroundColor:selectedRoute === '/notifications'?'white':'transparent',
+          color:selectedRoute==='/notifications'?'black':'white',
+          "&:hover":{
+            backgroundColor:"rgba(255, 255, 255, 0.1)"
+          },margin:"0 7px 0 5px",borderRadius:"10px"}}
+           onClick={() => handleNavigation("/notifications")}>
+          <ListItemIcon sx={{color:selectedRoute==='/notifications'?'black':"white",minWidth:"5px" }}>
+          <IoIosNotifications />
+          </ListItemIcon>
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Notifications"} />
+          <Badge badgeContent={4} color="primary">
+  <MailIcon color="action" />
+</Badge>
         </ListItemButton>
       </List>
 

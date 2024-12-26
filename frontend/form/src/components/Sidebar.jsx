@@ -31,7 +31,7 @@ function Sidebar() {
 
   const handleLogout = () => {
     dispatch(handlelogout());
-    navigate("/login");
+    navigate("/adminlogin");
   };
 
   const handleNavigation = (route) => {

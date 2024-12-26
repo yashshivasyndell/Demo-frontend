@@ -32,7 +32,7 @@ console.log("admin auth is: ",isAuthenticated)
        <Routes>
         <Route path='/adminlogin' element={<Login/>}/>
         <Route path='/register' element={<Form/>}/>
-        <Route path='/login' element={<UserLogin/>}/>
+        <Route path='/userlogin' element={<UserLogin/>}/>
       </Routes>
        }
     </div>
