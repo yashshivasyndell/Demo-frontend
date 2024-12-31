@@ -21,6 +21,7 @@ export const handlelogin = (loginCred) => async (dispatch) => {
     } catch (error) {
       dispatch({ type: "LOGIN_FAIL", payload: "Login Failed" });
       return (
+        console.log("error in login api"),
         error.response.data ||
         error.message ||
         "Login Failed Please Try Again After Sometime"

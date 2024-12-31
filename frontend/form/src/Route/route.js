@@ -1,4 +1,5 @@
 import Addwords from '../components/Addwords';
+import AdminChat from '../components/AdminChat';
 import AdminPanel from '../components/AdminPanel';
 import Dashboard from '../components/Dashboard';
 import Gallary from '../components/Gallary';
@@ -59,6 +60,11 @@ const routes = [
   {
     path: '/notifications',
     component: Notifications,
+    authRequired: true,
+  },
+  {
+    path: '/adminchat',
+    component: AdminChat,
     authRequired: true,
   }
   

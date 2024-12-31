@@ -118,15 +118,15 @@ function Sidebar() {
           <ListItemText sx={{marginLeft:"16px"}} primary={"Add Words"} />
         </ListItemButton>
 
-        <ListItemButton sx={{backgroundColor:selectedRoute === '/game'?'white':'transparent',
-          color:selectedRoute==='/game'?'black':'white',
+        <ListItemButton sx={{backgroundColor:selectedRoute === '/adminchat'?'white':'transparent',
+          color:selectedRoute==='/adminchat'?'black':'white',
           "&:hover":{
             backgroundColor:"rgba(255, 255, 255, 0.1)"
-          },margin:"0 7px 0 5px",borderRadius:"10px"}} onClick={() => handleNavigation("/game")}>
-          <ListItemIcon sx={{color:selectedRoute==='/game'?'black':"white",minWidth:"5px" }}>
+          },margin:"0 7px 0 5px",borderRadius:"10px"}} onClick={() => handleNavigation("/adminchat")}>
+          <ListItemIcon sx={{color:selectedRoute==='/adminchat'?'black':"white",minWidth:"5px" }}>
             <IoGameControllerOutline />
           </ListItemIcon>
-          <ListItemText sx={{marginLeft:"16px"}} primary={"Games"} />
+          <ListItemText sx={{marginLeft:"16px"}} primary={"Chat with User"} />
         </ListItemButton>
 
         <ListItemButton sx={{backgroundColor:selectedRoute === '/custom'?'white':'transparent',

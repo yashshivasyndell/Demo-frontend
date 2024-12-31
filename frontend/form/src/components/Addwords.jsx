@@ -23,6 +23,12 @@ const Addwords = () => {
   const [topic, setTopic] = useState("");
 
   const handleSubmit = async () => {
+    const jsonconfig = {
+      headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials:true
+    }
     try {
       const resp = await axios.post("http://localhost:3000/words/addwords", {
         language,
@@ -30,7 +36,8 @@ const Addwords = () => {
         topic,
         word: inputValue,
         sentence: inputValueWord,
-      });
+        
+      },jsonconfig);
 
       console.log("Word added successfully:", resp.data);
       if (resp.status === 201) {

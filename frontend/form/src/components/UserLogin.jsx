@@ -182,7 +182,7 @@ export const UserLogin = () => {
       </button>
     </div>
   </div>
-  <ToastContainer />
+  
 </div>
 
   );
