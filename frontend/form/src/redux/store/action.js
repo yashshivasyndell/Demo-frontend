@@ -48,11 +48,13 @@ export const handlelogin = (loginCred) => async (dispatch) => {
        
     }
   }
+
   export const loadUser = () => async (dispatch) => {
     try {
       dispatch({ type: "LOAD_REQ" });
       console.log("load req dispacth");
       const { data } = await axios.get('http://localhost:3000/auth/loadUser', jsonconfig);
+      
       dispatch({ type: "LOAD_SUCCESS", payload: data });
     } catch (error) {
       dispatch({ type: "LOAD_FAIL", payload: error });
@@ -64,9 +66,7 @@ export const handlelogin = (loginCred) => async (dispatch) => {
   export const handleUserData =()=>async (dispatch)=>{
       try{
       dispatch({type:"ALL_USER_LOADING"})
-      console.log("users loading");
       const {data} = await axios.get('http://localhost:3000/users/dataset',jsonconfig)
-      console.log("users loading success");
       setTimeout(()=>{
         dispatch({type:"ALL_USER_SUCCESS",payload:data})
       },1000)
@@ -75,5 +75,15 @@ export const handlelogin = (loginCred) => async (dispatch) => {
       console.log("error: ",error);
       return error.response.data
     }
- 
+  }
+  export const handleSendMessage = (credential) => async (dispatch) => {
+    try{
+      const {data} =await axios.post('http://localhost:3000/chat/sendmessage',
+      credential,
+      jsonconfig)
+      return data
+      
+    }catch(error){
+      console.log(error);
+    }
   }

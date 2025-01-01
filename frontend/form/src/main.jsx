@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 const theme = createTheme();
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
     <Provider store={Store}>
       <BrowserRouter>
       <ThemeProvider theme={theme}>
@@ -17,5 +17,5 @@ createRoot(document.getElementById('root')).render(
       </ThemeProvider>
       </BrowserRouter>
     </Provider>
-  </StrictMode>
+  </>
 );

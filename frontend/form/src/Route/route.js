@@ -7,6 +7,7 @@ import Home from '../components/Home';
 import Loader from '../components/Loader';
 import Notifications from '../components/Notifications';
 import Profile from '../components/Profile';
+import UserChat from '../components/UserChat';
 import { UserLogin } from '../components/UserLogin';
 import Usertable from '../components/Usertable';
 
@@ -65,6 +66,11 @@ const routes = [
   {
     path: '/adminchat',
     component: AdminChat,
+    authRequired: true,
+  },
+  {
+    path: '/userchat',
+    component: UserChat,
     authRequired: true,
   }
   

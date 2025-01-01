@@ -45,15 +45,12 @@ export const Login = () => {
     }));
   };
      
-  
   const handleLogin = async (e) => {
       e.preventDefault();
       try {
         await validationSchema.validate(user, { abortEarly: false });
         setErrors({});
         const response =await dispatch(handlelogin(user));
-        console.log("this is response ",response)
-      
         if (response && response.success) {
           handleSuccess(`Logged in as ${response.role}`);
           const {role} = response

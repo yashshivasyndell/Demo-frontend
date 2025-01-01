@@ -54,9 +54,7 @@ function UserSidebar() {
     const fetchUnseenNotifications = async () => {
         try {
             const response = await axios.get('http://localhost:3000/words/unseen');
-            console.log(response.data.noOfnotification); 
             let num = response.data.noOfnotification
-            console.log(num);
             setNum(num)
         } catch (error) {
             console.error('Error fetching unseen notifications:', error);
@@ -75,6 +73,15 @@ const handleNotiClick = ()=>{
   navigate('/notifications')
   setSelectedRoute("/notifications");
   seenNotific()
+}
+
+const handleUserMessage = ()=>{
+  const seenNotific = async ()=>{
+    
+  }
+  navigate('/userchat')
+  setSelectedRoute("/userchat");
+  
 }
 
 
@@ -197,6 +204,33 @@ const handleNotiClick = ()=>{
             <MailIcon color="action" />
           </Badge>
         </ListItemButton>
+        <ListItemButton
+          sx={{
+            backgroundColor:
+              selectedRoute === "/userchat" ? "white" : "transparent",
+            color: selectedRoute === "/userchat" ? "black" : "white",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+            },
+            margin: "0 7px 0 5px",
+            borderRadius: "10px",
+          }}
+          onClick={handleUserMessage}
+        >
+          <ListItemIcon
+            sx={{
+              color: selectedRoute === "/userchat" ? "black" : "white",
+              minWidth: "5px",
+            }}
+          >
+            <IoIosNotifications />
+          </ListItemIcon>
+          <ListItemText sx={{ marginLeft: "16px" }} primary={"Messages"} />
+          <Badge badgeContent={num} color="primary">
+            <MailIcon color="action" />
+          </Badge>
+        </ListItemButton>
+        
       </List>
 
       <Divider />
