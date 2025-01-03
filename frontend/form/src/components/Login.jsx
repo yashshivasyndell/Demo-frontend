@@ -15,7 +15,8 @@ export const Login = () => {
     password: "",
   });
 
-  const [focusedInput, setFocusedInput] = useState("");
+  const [focusedInput, setFocusedInput] = useState("email");
+  const [focusedInputPass, setFocusedInputPass] = useState("password");
   const [showPass, setShowPass] = useState(false);
 
   const dispatch = useDispatch();
@@ -97,9 +98,8 @@ export const Login = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-[#021b79] to-[#0575e6]">
-  <div className="bg-[#fff] w-[40%] h-[272.38px] flex flex-col rounded-lg shadow-2xl">
-  
-    <h2 className="text-3xl font-semibold text-gray-700 text-center mt-8 relative"><RiAdminFill className="absolute left-[10px] text-sm" /> Admin Login</h2>
+  <div className="bg-[#fff] w-[40%] h-[40vh] lg:h-[272px] flex flex-col rounded-lg shadow-2xl">
+    <h2 className="text-3xl font-semibold text-gray-700 text-center mt-8 relative"><RiAdminFill className="absolute md:left-[80px] lg:left-[142px] top-2 text-2xl" /> Admin Login</h2>
     <form action="" autoComplete="on" className="p-6">
       {/* Email Field */}
       <div className="relative mb-6">
@@ -114,8 +114,8 @@ export const Login = () => {
         }}
           className={`absolute left-9 top-[2px] text-gray-200 pointer-events-none transition-all duration-200 ${
             focusedInput === "email" || user.email
-              ? "top-[-29px] left-[9px] text-sm text-black px-1"
-              : "top-2 text-gray-200"
+              ? "top-[-25px] left-[0px] text-sm text-black px-1"
+              : "top-2 text-gray-500"
           }`}
         >
           Email
@@ -135,13 +135,13 @@ export const Login = () => {
       <div className="relative mb-0 mt-9">
         <IoLockClosed
           className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors ${
-            focusedInput === "password" ? "text-black" : "text-gray-300"
+            focusedInputPass === "password" ? "text-black" : "text-gray-300"
           }`}
         />
         <label
   className={`absolute left-9 top-[3px] pointer-events-none transition-all duration-200 ${
-    focusedInput === "password" || user.password
-      ? "top-[-29px] left-[9px] text-sm text-black px-1"
+    focusedInputPass === "password" || user.password
+      ? "top-[-25px] left-[0px] text-sm text-black px-1"
       : "top-2 text-gray-500"
   }`}
 >
@@ -152,8 +152,8 @@ export const Login = () => {
           name="password"
           value={user.password}
           onChange={handleChange}
-          onFocus={() => setFocusedInput("password")}
-          onBlur={() => setFocusedInput("")}
+          onFocus={() => setFocusedInputPass("password")}
+          onBlur={() => setFocusedInputPass("")}
           className="w-full pl-10 pr-10 h-[30px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           autoComplete="on"
         />
@@ -166,16 +166,16 @@ export const Login = () => {
       </div>
     </form>
 
-    <div className="flex justify-between px-6 ">
+    <div className="grid gap-1 lg:flex justify-between px-7 ">
       <button
         onClick={handleLogin}
-        className="bg-[#175676] text-white h-[35px] w-[13%] rounded-md"
+        className="bg-[#175676] sm:w-[80px] text-white h-[35px]  rounded-md"
       >
         Login
       </button>
       <button
         onClick={handleSignin}
-        className="bg-[#175676] text-white py-2 px-4 rounded-md"
+        className="bg-[#175676] text-white py-1 px-4 rounded-md"
       >
         Sign Up
       </button>

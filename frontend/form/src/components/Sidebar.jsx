@@ -16,7 +16,7 @@ import { CiUser } from "react-icons/ci";
 import { SiSimpleanalytics } from "react-icons/si";
 function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [selectedRoute, setSelectedRoute] = useState("/home");
+  const [selectedRoute, setSelectedRoute] = useState("/adminpanel");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

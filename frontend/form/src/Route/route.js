@@ -13,6 +13,11 @@ import Usertable from '../components/Usertable';
 
 const routes = [
   {
+    path: '/adminpanel',
+    component: AdminPanel,
+    authRequired: true,
+  },
+  {
     path: '/home',
     component: Home,
     exact: true,
@@ -36,11 +41,6 @@ const routes = [
   {
     path: '/table',
     component: Usertable,
-    authRequired: true,
-  },
-  {
-    path: '/adminpanel',
-    component: AdminPanel,
     authRequired: true,
   },
   {

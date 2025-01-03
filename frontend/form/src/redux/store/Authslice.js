@@ -5,6 +5,7 @@ const initialState = {
   isAdmin:false,
   role:null,
   loading: false,
+  id:null,
   error: null,
   user: null,
 };
@@ -20,6 +21,7 @@ const userReducer = createReducer(initialState, (builder) => {
     state.loading = false
     state.user = action.payload.userData;
     state.isAuthenticated = true;
+    state.id = action.payload.id
   });
   builder.addCase("LOAD_FAIL", (state, action) => {
     state.user = null;

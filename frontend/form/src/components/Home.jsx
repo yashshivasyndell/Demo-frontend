@@ -19,7 +19,7 @@ export default function AccordionUsage() {
 
   return (
    <>
-   
+   this is home
    </>
   );
 }

@@ -20,6 +20,7 @@ console.log("admin auth is: ",isAuthenticated)
   useEffect(() => {
     if (!isAuthenticated) {
       dispatch(loadUser());
+      navigate('/adminlogin')
     }else{
       navigate('/dashboard')
     }

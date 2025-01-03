@@ -54,7 +54,7 @@ export const handlelogin = (loginCred) => async (dispatch) => {
       dispatch({ type: "LOAD_REQ" });
       console.log("load req dispacth");
       const { data } = await axios.get('http://localhost:3000/auth/loadUser', jsonconfig);
-      
+      console.log(data.userData._id);
       dispatch({ type: "LOAD_SUCCESS", payload: data });
     } catch (error) {
       dispatch({ type: "LOAD_FAIL", payload: error });
